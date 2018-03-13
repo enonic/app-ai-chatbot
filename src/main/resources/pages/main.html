@@ -6,58 +6,125 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>{{title}}</title>
 
-    <link rel="apple-touch-icon" href="{{precacheUrl}}/icons/icon.png">
-    <link rel="icon" href="{{precacheUrl}}/icons/icon.png">
+    <style>
+        body {
+            background: #dcdde0;
+        }
+        .bubble-container {
+            height: 100vh;
+        }
+        .bubble-container .input-wrap textarea {
+            margin: 0;
+            width: calc(100% - 30px);
+        }
+    </style>
 
-    <link rel="manifest" href="{{baseUrl}}/manifest.json">
-    <link rel="mask-icon" href="{{precacheUrl}}/icons/safari-pinned-tab.svg" color="#f53d3d">
-    <meta name="theme-color" content="{{themeColor}}">
-    <meta name="msapplication-config" content="{{baseUrl}}/browserconfig.xml"/>
-    <meta name="msapplication-TileColor" content="{{themeColor}}">
-    <meta name="Description" content="{{title}}">
 
-    <script type="text/javascript" src="{{precacheUrl}}/js/material.min.js" async></script>
-    <script type="text/javascript" src="{{precacheUrl}}/bundle.js" async></script>
-    {{{styles}}}
+    <link rel="stylesheet" type="text/css" href="css/bubble/styles/input.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="css/bubble/styles/reply.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="css/bubble/styles/says.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="css/bubble/styles/setup.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="css/bubble/styles/typing.css" media="screen"/>
+    <!--<script type="text/javascript" src="{{precacheUrl}}/bundle.js" async></script>-->
 
 </head>
 
 <body>
-<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
 
-    <header class="mdl-layout__header">
-        <div class="mdl-layout__header-row">
-            <!-- Title -->
-            <span class="mdl-layout-title">{{title}}</span>
-        </div>
-    </header>
-    <div class="mdl-layout__drawer">
-        <span class="mdl-layout-title">{{title}} {{version}}</span>
-        <nav class="mdl-navigation">
-            <a class="mdl-navigation__link" href="{{baseUrl}}"><b>Home</b></a>
-            <a class="mdl-navigation__link" href="{{baseUrl}}/about">About</a>
-            <a class="mdl-navigation__link" href="{{baseUrl}}/contact">Contact</a>
-        </nav>
-    </div>
-
-    <main class="mdl-layout__content" id="main-content">
-        <div id="main-container">
-            <img id="icon-online" class="icon-status" src="{{precacheUrl}}/icons/online.svg" alt="Online">
-            <img id="icon-offline" class="icon-status" src="{{precacheUrl}}/icons/offline.svg" alt="Offline">
-            <noscript>
-                <p id="js-disabled">Javascript is disabled. PWA features of this application are not available.</p>
-            </noscript>
-            <!-- Your content goes here -->
-        </div>
-
-    </main>
-    <footer id="notification-bar" class="mdl-js-snackbar mdl-snackbar" aria-hidden="true">
-        <div class="mdl-snackbar__text"></div>
-        <button class="mdl-snackbar__action" type="button"></button>
-    </footer>
-</div>
+<main id="chat"></main>
 
 {{{serviceWorker}}}
 
+<script src="js/bubble/Bubbles.js"></script>
+<script>
+
+    // initialize by constructing a named function...
+    // ...and add text processing plugin:
+    var chatWindow = new Bubbles(document.getElementById("chat"), "chatWindow", {
+        // the one that we care about is inputCallbackFn()
+        // this function returns an object with some data that we can process from user input
+        // and understand the context of it
+
+        // this is an example function that matches the text user typed to one of the answer bubbles
+        // this function does no natural language processing
+        // this is where you may want to connect this script to NLC backend.
+        inputCallbackFn: function(o) {
+            // add error conversation block & recall it if no answer matched
+            var miss = function() {
+                chatWindow.talk(
+                    {
+                        "i-dont-get-it": {
+                            says: [
+                                "Sorry, I don't get it 😕. Pls repeat? Or you can just click below 👇"
+                            ],
+                            reply: o.convo[o.standingAnswer].reply
+                        }
+                    },
+                    "i-dont-get-it"
+                )
+            }
+
+            // do this if answer found
+            var match = function(key) {
+                setTimeout(function() {
+                    chatWindow.talk(convo, key) // restart current convo from point found in the answer
+                }, 600)
+            }
+
+            // sanitize text for search function
+            var strip = function(text) {
+                return text.toLowerCase().replace(/[\s.,\/#!$%\^&\*;:{}=\-_'"`~()]/g, "")
+            }
+
+            // search function
+            var found = false
+            o.convo[o.standingAnswer].reply.forEach(function(e, i) {
+                strip(e.question).includes(strip(o.input)) && o.input.length > 0
+                    ? (found = e.answer)
+                    : found ? null : (found = false)
+            })
+            found ? match(found) : miss()
+        }
+    }) // done setting up chat-bubble
+
+    // conversation object defined separately, but just the same as in the
+    // "Basic chat-bubble Example" (1-basics.html)
+    var convo = {
+        ice: {
+            says: ["Hi", "Would you like banana or ice cream?"],
+            reply: [
+                {
+                    question: "Banana",
+                    answer: "banana"
+                },
+                {
+                    question: "Ice Cream",
+                    answer: "ice-cream"
+                }
+            ]
+        },
+        banana: {
+            says: ["🍌"],
+            reply: [
+                {
+                    question: "Start Over",
+                    answer: "ice"
+                }
+            ]
+        },
+        "ice-cream": {
+            says: ["🍦"],
+            reply: [
+                {
+                    question: "Start Over",
+                    answer: "ice"
+                }
+            ]
+        }
+    }
+
+    // pass JSON to your function and you're done!
+    chatWindow.talk(convo)
+</script>
 </body>
 </html>

@@ -13,7 +13,6 @@ var renderPage = function (pageName) {
                 baseUrl: helper.getBaseUrl(),
                 precacheUrl: helper.getBaseUrl() + '/precache',
                 themeColor: '#FFF',
-                styles: mustacheLib.render(resolve('/pages/styles.html')),
                 serviceWorker: mustacheLib.render(resolve('/pages/sw.html'), {
                     title: siteTitle,
                     baseUrl: helper.getBaseUrl(),
@@ -26,10 +25,6 @@ var renderPage = function (pageName) {
 };
 
 router.get('/', renderPage('main.html'));
-
-router.get('/about', renderPage('about.html'));
-
-router.get('/contact', renderPage('contact.html'));
 
 router.get('/sw.js', swController.get);
 
