@@ -1,0 +1,38 @@
+{
+  "name": "starter-pwa",
+  "version": "1.4.0",
+  "description": "PWA Starter Kit for Enonic XP Platform",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/enonic/starter-workbox.git"
+  },
+  "scripts": {
+    "build": "gradle build",
+    "deploy": "gradle deploy",
+    "watch": "gradle deploy -t",
+    "train-models": "cd rasa && python -m rasa_nlu.train -c nlu_model_config.json --fixed_model_name current",
+    "train-stories": "cd rasa && python -m rasa_core.train -s data/stories.md -d domain.yml -o models/stories",
+    "rasa-server": "cd rasa && python -m rasa_core.server -d models/stories -u models/nlu/default/current -o logs/server.log"
+  },
+  "keywords": [
+    "enonic",
+    "workbox",
+    "webpack",
+    "pwa"
+  ],
+  "author": "Alan Semenov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/enonic/starter-pwa/issues"
+  },
+  "homepage": "https://github.com/enonic/starter-pwa#readme",
+  "devDependencies": {
+    "css-loader": "^0.26.1",
+    "extract-text-webpack-plugin": "^3.0.0",
+    "less": "^2.7.2",
+    "less-loader": "^2.2.3",
+    "style-loader": "^0.13.1",
+    "webpack": "^3.10.0",
+    "workbox-webpack-plugin": "^2.1.0"
+  }
+}
