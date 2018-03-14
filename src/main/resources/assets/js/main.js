@@ -1,5 +1,4 @@
 require('../css/styles.less');
-
 var chat = require('../js/bubble/Bubbles');
 var rasa = require('../js/rasa');
 
@@ -13,10 +12,10 @@ var rasa = require('../js/rasa');
         }
     });
 
-    rasa.onResponse = function (jsonResponse) {
+    rasa.onResponse(function (jsonResponse) {
         // jsonResponse = convertRasaToBubbleJson(jsonResponse)
-        chatWindow.talk(jsonResponse)
-    }
+        chatWindow.talk(jsonResponse);
+    });
 
     chatWindow.talk(
         {
