@@ -27,6 +27,7 @@ var renderPage = function (pageName) {
 };
 
 var forwardToRasa = function (request) {
+    var q = request.params["query"];
     var rasaUrl = helper.getRasaUrl();
     log.info('>>> RASA URL <<< : [' + rasaUrl + '] ? query = "' + q + '"');
     var rasaResponse = httpClient.request({
@@ -38,7 +39,7 @@ var forwardToRasa = function (request) {
         },
         connectionTimeout: 20000,
         readTimeout: 5000,
-        body: '{"query": "' + request.params["query"] + '"}',
+        body: '{"query": "' + q + '"}',
         contentType: 'text/plain'
     });
     log.info('>>> RASA RESPONSE <<< : [' + JSON.stringify(rasaResponse) + ']');
