@@ -6,25 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>{{title}}</title>
 
-    <style>
-        body {
-            background: #dcdde0;
-        }
-        .bubble-container {
-            height: 100vh;
-        }
-        .bubble-container .input-wrap textarea {
-            margin: 0;
-            width: calc(100% - 30px);
-        }
-    </style>
-
-
     <link rel="stylesheet" type="text/css" href="{{appUrl}}/css/bubble/styles/input.css" media="screen"/>
     <link rel="stylesheet" type="text/css" href="{{appUrl}}/css/bubble/styles/reply.css" media="screen"/>
     <link rel="stylesheet" type="text/css" href="{{appUrl}}/css/bubble/styles/says.css" media="screen"/>
     <link rel="stylesheet" type="text/css" href="{{appUrl}}/css/bubble/styles/setup.css" media="screen"/>
     <link rel="stylesheet" type="text/css" href="{{appUrl}}/css/bubble/styles/typing.css" media="screen"/>
+
+    <link rel="stylesheet" type="text/css" href="{{precacheUrl}}/bundle.css" media="screen"/>
     <script type="text/javascript" src="{{precacheUrl}}/bundle.js" async></script>
 
 </head>
@@ -34,9 +22,6 @@
 <main id="chat"></main>
 
 {{{serviceWorker}}}
-<script>
-    appUrl = '{{appUrl}}';
-</script>
 
 </body>
 </html>
