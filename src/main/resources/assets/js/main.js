@@ -13,7 +13,34 @@ var rasa = require('../js/rasa');
 
     rasa.onResponse(function (jsonResponse) {
         // jsonResponse = convertRasaToBubbleJson(jsonResponse)
-        chatWindow.talk(jsonResponse);
+        if ('application/json' == jsonResponse.contentType) {
+
+            var action = JSON.parse(jsonResponse.body).next_action;
+
+            chatWindow.talk(
+                {
+                    ice: {
+                        says: [action]/*,
+                    reply: [
+                        {
+                            question: "1 option",
+                            answer: "firstOptionHandler"
+                        },
+                        {
+                            question: "2 option",
+                            answer: "secondOptionHandler"
+                        }
+                    ]*/
+                    }
+
+                })
+
+            if (!rasa.actions.ACTION_LISTEN == action) {
+                rasa.action(action);
+            }
+
+        }
+
     });
 
     chatWindow.talk(

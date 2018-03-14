@@ -46,9 +46,12 @@ function unResponse(callback) {
     });
 }
 
+var actions = {ACTION_LISTEN:'action_listen'};
+
 module.exports = {
     message: message,
     action: action,
+    actions: actions,
     onResponse: onResponse,
     unResponse: unResponse
 };
