@@ -20,11 +20,11 @@
     </style>
 
 
-    <link rel="stylesheet" type="text/css" href="css/bubble/styles/input.css" media="screen"/>
-    <link rel="stylesheet" type="text/css" href="css/bubble/styles/reply.css" media="screen"/>
-    <link rel="stylesheet" type="text/css" href="css/bubble/styles/says.css" media="screen"/>
-    <link rel="stylesheet" type="text/css" href="css/bubble/styles/setup.css" media="screen"/>
-    <link rel="stylesheet" type="text/css" href="css/bubble/styles/typing.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="{{appUrl}}/css/bubble/styles/input.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="{{appUrl}}/css/bubble/styles/reply.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="{{appUrl}}/css/bubble/styles/says.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="{{appUrl}}/css/bubble/styles/setup.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="{{appUrl}}/css/bubble/styles/typing.css" media="screen"/>
     <!--<script type="text/javascript" src="{{precacheUrl}}/bundle.js" async></script>-->
 
 </head>
@@ -35,7 +35,7 @@
 
 {{{serviceWorker}}}
 
-<script src="js/bubble/Bubbles.js"></script>
+<script src="{{appUrl}}/js/bubble/Bubbles.js"></script>
 <script>
 
     // initialize by constructing a named function...
@@ -126,5 +126,10 @@
     // pass JSON to your function and you're done!
     chatWindow.talk(convo)
 </script>
+
+<script>
+    appUrl = '{{appUrl}}';
+</script>
+
 </body>
 </html>

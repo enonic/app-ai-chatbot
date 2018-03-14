@@ -2,7 +2,7 @@ var mustacheLib = require('/lib/xp/mustache');
 var router = require('/lib/router')();
 var helper = require('/lib/helper');
 var swController = require('/lib/pwa/sw-controller');
-var siteTitle = 'PWA Starter';
+var siteTitle = 'AI Bot';
 
 var renderPage = function (pageName) {
     return function () {
@@ -10,6 +10,7 @@ var renderPage = function (pageName) {
             body: mustacheLib.render(resolve('pages/' + pageName), {
                 title: siteTitle,
                 version: app.version,
+                appUrl: helper.getAppUrl(),
                 baseUrl: helper.getBaseUrl(),
                 precacheUrl: helper.getBaseUrl() + '/precache',
                 themeColor: '#FFF',
@@ -28,6 +29,6 @@ router.get('/', renderPage('main.html'));
 
 router.get('/sw.js', swController.get);
 
-exports.get = function (req) {
+exports.all = function (req) {
     return router.dispatch(req);
 };
