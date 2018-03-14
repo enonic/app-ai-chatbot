@@ -5,7 +5,6 @@ var rasa = require('../js/rasa');
 
 (function () {
 
-    debugger;
     var chatWindow = window.chatWindow = new chat.Bubbles(document.getElementById("chat"), "chatWindow", {
         inputCallbackFn: function (o) {
             debugger;
@@ -17,6 +16,14 @@ var rasa = require('../js/rasa');
         // jsonResponse = convertRasaToBubbleJson(jsonResponse)
         chatWindow.talk(jsonResponse)
     }
+
+    chatWindow.talk(
+        {
+            "ice": {
+                "says": ["HI!", "How can I help you?"]
+            }
+        }
+    );
 })();
 
 
