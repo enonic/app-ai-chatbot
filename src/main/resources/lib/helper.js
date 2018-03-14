@@ -4,6 +4,10 @@ exports.getAppUrl = function getAppUrl() {
     return portalLib.url({path: '/app/' + app.name});
 };
 
+exports.getRasaUrl = function getRasaUrl() {
+    return portalLib.url({path:'/', type:'absolute'});
+};
+
 exports.getBaseUrl = function () {
     var appUrl = this.getAppUrl();
     var baseUrl = this.endsWithSlash(appUrl) ? appUrl.slice(0, -1) : appUrl;
