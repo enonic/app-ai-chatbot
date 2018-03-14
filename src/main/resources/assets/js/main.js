@@ -1,4 +1,5 @@
 require('../css/styles.less');
+
 var chat = require('../js/bubble/Bubbles');
 var rasa = require('../js/rasa');
 

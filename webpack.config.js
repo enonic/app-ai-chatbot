@@ -1,6 +1,6 @@
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const WorkboxPlugin = require('workbox-webpack-plugin');
 const path = require('path');
-const extractTextPlugin = require('extract-text-webpack-plugin');
-const workboxPlugin = require('workbox-webpack-plugin');
 
 const paths = {
     assets: 'src/main/resources/assets/',
@@ -13,32 +13,45 @@ const buildAssetsPath = path.join(__dirname, paths.buildAssets);
 const buildPwaLibPath = path.join(__dirname, paths.buildPwaLib);
 
 module.exports = {
-
     entry: path.join(assetsPath, 'js/main.js'),
-
     output: {
         path: buildAssetsPath,
         filename: 'precache/bundle.js'
     },
-
     resolve: {
-        extensions: ['.js', '.less']
+        extensions: ['.js', '.less', '.css']
     },
-
     module: {
         rules: [
             {
-                test: /.less$/,
-                loader: extractTextPlugin.extract({
+                test: /\.less$/,
+                use: ExtractTextPlugin.extract({
                     fallback: 'style-loader',
-                    use: "css-loader!less-loader"
+                    publicPath: '../',
+                    use: [
+                        { loader: 'css-loader', options: { sourceMap: true, importLoaders: 1 } },
+                        { loader: 'postcss-loader', options: { sourceMap: true, config: { path: 'postcss.config.js' } } },
+                        { loader: 'less-loader', options: { sourceMap: true } }
+                    ]
                 })
+            },
+            {
+                test: /\.(eot|woff|woff2|ttf)$/,
+                use: 'file-loader?name=precache/font/[name].[ext]'
+            },
+            {
+                test: /\.(png|jpg|gif|svg)$/,
+                use: 'file-loader?name=precache/img/[name].[ext]'
             }
         ]
     },
     plugins: [
-        new extractTextPlugin('precache/bundle.css'),
-        new workboxPlugin({
+      new ExtractTextPlugin({
+            filename: 'precache/bundle.css',
+            allChunks: true,
+            disable: false
+        }),
+        new WorkboxPlugin({
             globDirectory: buildAssetsPath,
             globPatterns: ['precache/**\/*'],
             globIgnores: [],

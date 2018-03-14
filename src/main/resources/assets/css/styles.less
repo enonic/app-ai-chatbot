@@ -1,13 +1,28 @@
-html, body, .bubble-container {
-  min-height: 100%;
+@import "bubble/input.css";
+@import "bubble/reply.css";
+@import "bubble/says.css";
+@import "bubble/setup.css";
+@import "bubble/typing.css";
+
+html,
+body,
+.bubble-container {
+  width: 100%;
   height: 100%;
+  margin: 0 auto;
 }
 
 body {
-  background: #dcdde0;
+  background: url("../img/chat-background.png") repeat #ebe8d7;
 }
 
 .bubble-container {
+  background: transparent;
+
+  .bubble-wrap {
+    padding: 10px;
+  }
+
   .input-wrap textarea {
     box-sizing: border-box;
   }
@@ -16,12 +31,12 @@ body {
 .bubble.reply {
   .bubble-content {
     .bubble-button {
-      background: rgba(22, 113, 230, 0.65);
+      background: #67a3ef;
     }
   }
 }
 
 .bubble.reply:not(.bubble-picked) .bubble-content .bubble-button:hover,
 .bubble.reply .bubble-content .bubble-button.bubble-pick {
-  background: rgba(22, 113, 230, 1);
+  background: #1671e6;
 }
