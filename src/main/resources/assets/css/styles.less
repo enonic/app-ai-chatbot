@@ -12,3 +12,16 @@ body {
     box-sizing: border-box;
   }
 }
+
+.bubble.reply {
+  .bubble-content {
+    .bubble-button {
+      background: rgba(22, 113, 230, 0.65);
+    }
+  }
+}
+
+.bubble.reply:not(.bubble-picked) .bubble-content .bubble-button:hover,
+.bubble.reply .bubble-content .bubble-button.bubble-pick {
+  background: rgba(22, 113, 230, 1);
+}
