@@ -1,10 +1,10 @@
 {
-  "name": "starter-pwa",
-  "version": "1.4.0",
-  "description": "PWA Starter Kit for Enonic XP Platform",
+  "name": "app-ai-chatbot",
+  "version": "0.0.1",
+  "description": "Simple chatbot, based on rasa framework",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/enonic/starter-workbox.git"
+    "url": "git+https://github.com/enonic/app-ai-chatbot.git"
   },
   "scripts": {
     "build": "gradle build",
@@ -17,16 +17,20 @@
   },
   "keywords": [
     "enonic",
-    "workbox",
-    "webpack",
-    "pwa"
+    "chatbot"
   ],
-  "author": "Alan Semenov",
+  "author": "Pavel Milkevich <pmi@enonic.com> (https://enonic.com)",
+  "contributors": [
+    "Mikita Taukachou <edloidas@gmail.com> (https://edloidas.com)",
+    "Viachaslau Bradnitski <vbr@enonic.com> (https://enonic.com)",
+    "Alex Shklianko <asl@enonic.com> (https://enonic.com)",
+    "Alan Semenov <asl@enonic.com> (https://enonic.com)"
+  ],
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/enonic/starter-pwa/issues"
+    "url": "https://github.com/enonic/app-ai-chatbot/issues"
   },
-  "homepage": "https://github.com/enonic/starter-pwa#readme",
+  "homepage": "https://github.com/enonic/app-ai-chatbot#readme",
   "devDependencies": {
     "css-loader": "^0.26.1",
     "extract-text-webpack-plugin": "^3.0.0",
