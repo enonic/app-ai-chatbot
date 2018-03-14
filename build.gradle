@@ -5,7 +5,7 @@ plugins {
 
 app {
     name = project.appName
-    displayName = 'PWA Starter Kit'
+    displayName = 'Chatbot App'
     vendorName = 'Enonic AS'
     vendorUrl = 'http://enonic.com'
     systemVersion = "${xpVersion}"
