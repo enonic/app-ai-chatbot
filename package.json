@@ -10,9 +10,8 @@
     "build": "gradle build",
     "deploy": "gradle deploy",
     "watch": "gradle deploy -t",
-    "train-models": "cd rasa && python -m rasa_nlu.train -c nlu_model_config.json --fixed_model_name current",
-    "train-stories": "cd rasa && python -m rasa_core.train -s data/stories.md -d domain.yml -o models/stories",
-    "train-stories-remote": "cd rasa && python -m rasa_core.train -s data/stories.md -d domain_remote.yml -o models/stories",
+    "train-nlu": "cd rasa && python bot.py train-nlu",
+    "train-stories": "cd rasa && python bot.py train-stories",
     "rasa-server": "cd rasa && python -m rasa_core.server -d models/stories -u models/nlu/default/current -p 7454 --cors [*] -o logs/server.log --debug -v"
   },
   "keywords": [

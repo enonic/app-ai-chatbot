@@ -26,34 +26,46 @@ var renderPage = function (pageName) {
     }
 };
 
-var forwardToRasa = function (request) {
-    var q = request.params["query"];
-    var rasaUrl = helper.getRasaUrl();
-    log.info('>>> RASA URL <<< : [' + rasaUrl + '] ? query = "' + q + '"');
+var sendToRasa = function (url, params, method) {
     var rasaResponse = httpClient.request({
-        url: rasaUrl,
-        method: 'POST',
+        url: url,
+        method: method,
         headers: {
             'Cache-Control': 'no-cache',
             'Accept': '*/*'
         },
         connectionTimeout: 20000,
         readTimeout: 5000,
-        body: '{"query": "' + q + '"}',
+        body: params,
         contentType: 'text/plain'
     });
-    log.info('>>> RASA RESPONSE <<< : [' + JSON.stringify(rasaResponse) + ']');
     return {
         body: rasaResponse,
         contentType: 'application/json'
     }
 };
 
+var rasaParse = function (req) {
+    var q = req.params["query"];
+    var url = helper.getRasaUrl() + 'parse';
+    var body = '{"query": "' + q + '"}';
+    return sendToRasa(url, body, 'POST');
+};
+
+function rasaContinue(req) {
+    var a = req.params["action"];
+    var e = req.params["events"];
+    var url = helper.getRasaUrl() + 'continue';
+    var body = '{"executed_action": "' + a + '", "events": ' + JSON.stringify(e) + '}';
+    return sendToRasa(url, body, 'POST');
+}
+
 router.get('/', renderPage('main.html'));
 
 router.get('/sw.js', swController.get);
 
-router.post('/', forwardToRasa);
+router.post('/rasa/parse', rasaParse);
+router.post('/rasa/continue', rasaContinue);
 
 exports.all = function (req) {
     return router.dispatch(req);

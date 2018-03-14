@@ -47,9 +47,9 @@ class ActionSuggest(Action):
         return []
 
 
-def train_dialogue(domain_file="restaurant_domain.yml",
-                   model_path="models/dialogue",
-                   training_data_file="data/babi_stories.md"):
+def train_stories(domain_file="domain.yml",
+                  model_path="models/stories",
+                  training_data_file="data/stories.md"):
     agent = Agent(domain_file,
                   policies=[MemoizationPolicy(), RestaurantPolicy()])
 
@@ -70,7 +70,7 @@ def train_nlu():
     from rasa_nlu.config import RasaNLUConfig
     from rasa_nlu.model import Trainer
 
-    training_data = load_data('data/franken_data.json')
+    training_data = load_data('data/nlu.json')
     trainer = Trainer(RasaNLUConfig("nlu_model_config.json"))
     trainer.train(training_data)
     model_directory = trainer.persist('models/nlu/', fixed_model_name="current")
@@ -80,7 +80,7 @@ def train_nlu():
 
 def run(serve_forever=True):
     interpreter = RasaNLUInterpreter("models/nlu/default/current")
-    agent = Agent.load("models/dialogue", interpreter=interpreter)
+    agent = Agent.load("models/stories", interpreter=interpreter)
 
     if serve_forever:
         agent.handle_channel(ConsoleInputChannel())
@@ -95,18 +95,18 @@ if __name__ == '__main__':
 
     parser.add_argument(
         'task',
-        choices=["train-nlu", "train-dialogue", "run"],
+        choices=["train-nlu", "train-stories", "run"],
         help="what the bot should do - e.g. run or train?")
     task = parser.parse_args().task
 
     # decide what to do based on first parameter of the script
     if task == "train-nlu":
         train_nlu()
-    elif task == "train-dialogue":
-        train_dialogue()
+    elif task == "train-stories":
+        train_stories()
     elif task == "run":
         run()
     else:
-        warnings.warn("Need to pass either 'train-nlu', 'train-dialogue' or "
+        warnings.warn("Need to pass either 'train-nlu', 'train-stories' or "
                       "'run' to use the script.")
         exit(1)

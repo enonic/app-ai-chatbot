@@ -45,6 +45,6 @@
     "version": 1
   },
   "entity_synonyms": "entity_synonyms.json",
-  "trained_at": "20180313-174013",
+  "trained_at": "20180314-183008",
   "rasa_nlu_version": "0.11.3"
 }

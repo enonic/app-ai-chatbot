@@ -19,8 +19,12 @@ function postAjax(url, data, success) {
     return xhr;
 }
 
-function send(message) {
-    postAjax(appUrl, {query: message}, notifyResponse);
+function message(message) {
+    postAjax(appUrl + '/rasa/parse', {query: message}, notifyResponse);
+}
+
+function action(action, events) {
+    postAjax(appUrl + '/rasa/continue', {action: action, events: events}, notifyResponse);
 }
 
 var responseListeners = [];
@@ -43,7 +47,8 @@ function unResponse(callback) {
 }
 
 module.exports = {
-    send: send,
+    message: message,
+    action: action,
     onResponse: onResponse,
     unResponse: unResponse
 };

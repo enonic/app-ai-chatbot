@@ -11,7 +11,7 @@ exports.getRasaUrl = function getRasaUrl() {
     if (firstIndex !== lastIndex && lastIndex >= 0) {
         url = url.substring(0, lastIndex) + ':7454/';
     }
-    return url + 'conversations/default/parse';
+    return url + 'conversations/default/';
 };
 
 exports.getBaseUrl = function () {

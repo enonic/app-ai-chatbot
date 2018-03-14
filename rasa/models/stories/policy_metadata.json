@@ -3,9 +3,9 @@
     "action_listen": {
       "slots": [
         "people",
-        "cuisine",
+        "location",
         "price",
-        "location"
+        "cuisine"
       ]
     }
   },
@@ -14,6 +14,6 @@
   "ensemble_name": "rasa_core.policies.ensemble.SimplePolicyEnsemble",
   "policy_names": [
     "rasa_core.policies.memoization.MemoizationPolicy",
-    "rasa_core.policies.keras_policy.KerasPolicy"
+    "policy.RestaurantPolicy"
   ]
 }
