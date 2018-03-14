@@ -13,14 +13,14 @@ function postAjax(url, data, success) {
         }
     };
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-    xhr.setRequestHeader('Content-Type', 'text/plain');
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xhr.setRequestHeader('Accept', '*/*');
     xhr.send(params);
     return xhr;
 }
 
 function send(message) {
-    postAjax(appUrl, {q: message}, notifyResponse);
+    postAjax(appUrl, {query: message}, notifyResponse);
 }
 
 var responseListeners = [];

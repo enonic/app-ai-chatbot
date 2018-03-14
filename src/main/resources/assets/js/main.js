@@ -7,7 +7,6 @@ var rasa = require('../js/rasa');
 
     var chatWindow = window.chatWindow = new chat.Bubbles(document.getElementById("chat"), "chatWindow", {
         inputCallbackFn: function (o) {
-            debugger;
             rasa.send(o.input);
         }
     });
