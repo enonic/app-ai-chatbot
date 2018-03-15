@@ -26,9 +26,9 @@ var renderPage = function (pageName) {
     }
 };
 
-var sendToRasa = function (url, params, method) {
+var sendToRasa = function (params, method, action) {
     var rasaResponse = httpClient.request({
-        url: url,
+        url: helper.getRasaUrl() + action,
         method: method,
         headers: {
             'Cache-Control': 'no-cache',
@@ -36,28 +36,37 @@ var sendToRasa = function (url, params, method) {
         },
         connectionTimeout: 20000,
         readTimeout: 5000,
-        body: params,
+        body: JSON.stringify(params),
         contentType: 'text/plain'
     });
     return {
         body: rasaResponse,
-        contentType: 'application/json'
+        action: action,
+        contentType: 'application/json',
+        status: rasaResponse.status
     }
 };
 
 var rasaParse = function (req) {
-    var q = req.params["query"];
-    var url = helper.getRasaUrl() + 'parse';
-    var body = '{"query": "' + q + '"}';
-    return sendToRasa(url, body, 'POST');
+    var data = JSON.parse(req.params["data"]);
+    var query = data.query;
+    var body = {
+        "query": query
+    };
+    log.info('RASA PARSE >>> query: ' + query);
+    return sendToRasa(body, 'POST', 'parse');
 };
 
 function rasaContinue(req) {
-    var a = req.params["action"];
-    var e = req.params["events"];
-    var url = helper.getRasaUrl() + 'continue';
-    var body = '{"executed_action": "' + a + '", "events": ' + JSON.stringify(e) + '}';
-    return sendToRasa(url, body, 'POST');
+    var data = JSON.parse(req.params["data"]);
+    var action = data.action;
+    var events = data.events || [];
+    log.info('RASA CONTINUE >>> action: ' + action + ', events: ' + JSON.stringify(events));
+    var body = {
+        "executed_action": action,
+        "events": events
+    };
+    return sendToRasa(body, 'POST', 'continue');
 }
 
 router.get('/', renderPage('main.html'));

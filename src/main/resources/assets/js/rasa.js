@@ -1,9 +1,5 @@
 function postAjax(url, data, success) {
-    var params = typeof data == 'string' ? data : Object.keys(data).map(
-        function (k) {
-            return encodeURIComponent(k) + '=' + encodeURIComponent(data[k])
-        }
-    ).join('&');
+    var params = "data=" + JSON.stringify(data);
 
     var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
     xhr.open('POST', url);
@@ -24,7 +20,18 @@ function message(message) {
 }
 
 function action(action, events) {
-    postAjax(appUrl + '/rasa/continue', {action: action, events: events}, notifyResponse);
+    var data = {};
+    if (action) {
+        data.action = action;
+    }
+    if (events) {
+        data.events = [].concat(events);
+    }
+    postAjax(appUrl + '/rasa/continue', data, notifyResponse);
+}
+
+function restart() {
+    action(actions.ACTION_LISTEN, {"event": "restart"});
 }
 
 var responseListeners = [];
@@ -46,11 +53,14 @@ function unResponse(callback) {
     });
 }
 
-var actions = {ACTION_LISTEN:'action_listen'};
+var actions = {
+    ACTION_LISTEN: 'action_listen'
+};
 
 module.exports = {
     message: message,
     action: action,
+    restart: restart,
     actions: actions,
     onResponse: onResponse,
     unResponse: unResponse

@@ -11,16 +11,20 @@ var rasa = require('../js/rasa');
         }
     });
 
+    rasa.restart();
+
     rasa.onResponse(function (jsonResponse) {
-        // jsonResponse = convertRasaToBubbleJson(jsonResponse)
-        if ('application/json' == jsonResponse.contentType) {
+        if (jsonResponse.status !== 200) {
+            return;
+        }
 
-            var action = JSON.parse(jsonResponse.body).next_action;
+        var nextAction = JSON.parse(jsonResponse.body).next_action;
 
+        if (nextAction && rasa.actions.ACTION_LISTEN !== nextAction) {
             chatWindow.talk(
                 {
                     ice: {
-                        says: [action]/*,
+                        says: [nextAction]/*,
                     reply: [
                         {
                             question: "1 option",
@@ -33,12 +37,10 @@ var rasa = require('../js/rasa');
                     ]*/
                     }
 
-                })
-
-            if (!rasa.actions.ACTION_LISTEN == action) {
-                rasa.action(action);
-            }
-
+                });
+            rasa.action(nextAction);
+        } else {
+            console.log('RASA: ' + nextAction);
         }
 
     });
@@ -46,7 +48,7 @@ var rasa = require('../js/rasa');
     chatWindow.talk(
         {
             "ice": {
-                "says": ["HI!", "How can I help you?"]
+                "says": ["Hi there!"]
             }
         }
     );
