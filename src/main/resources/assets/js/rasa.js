@@ -54,7 +54,7 @@ function unResponse(callback) {
 }
 
 var actions = {
-    ACTION_LISTEN: 'action_listen'
+    ACTION_LISTEN: 'action_listen', ASK_PRICE: 'utter_ask_price'
 };
 
 module.exports = {
