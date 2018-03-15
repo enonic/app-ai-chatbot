@@ -1,43 +1,51 @@
 = AI Chatbot
 
-PWA AI Chatbot, based on the rasa framework.
+PWA AI chat bot, based on the http://rasa.com[RASA] framework.
 
 == Installation
 
-=== RASA
+==== Python
 
-==== Step 1
+RASA stack is written in python so first make sure you have it installed
 
-===== Unix
+====== Unix
 * python 3
 * make
 * A proper C/C++ compiler toolchain, like GCC
 
-===== Mac OS X
+====== Mac OS X
 * python
 * Xcode
 * You also need to install the Command Line Tools via Xcode. You can find this under the menu Xcode -> Preferences -> Downloads
 * This step will install gcc and the related toolchain containing make
 
-===== Windows
+====== Windows
 * python 3
 * https://github.com/felixrieseberg/windows-build-tools[windows-build-tools]
 * Install all the required tools and configurations using Microsoft's windows-build-tools using  from an elevated PowerShell or CMD.exe (run as Administrator).
 
-==== Step 2
+==== RASA
 
-Follow the official https://core.rasa.ai/installation.html#installation[documentation] to install rasa.
+We're going to need rasa_core, rasa_nlu[spacy] packages and english language pack for rasa_nlu.
 
-=== Application
+Follow the official https://core.rasa.ai/installation.html#installation[documentation] to install rasa_core package.
 
-When everything is install, deploy the application to Enonic XP with the following command:
+Rasa_nlu package and english language pack installations are described http://rasa-nlu.readthedocs.io/en/latest/installation.html[here]
+
+==== Application
+
+When everything is installed, deploy the application to Enonic XP with the following command:
 ```
 gradle deploy
 ```
 
-=== Usage
+== Usage
 
-Login to Enonic XP and go to:
+First we need to start rasa server by navigating to the project root and typing in console:
+```
+npm run rasa-server
+```
+After server is up and running login to Enonic XP and navigate to:
 ```
 http://localhost:8080/app/com.enonic.app.aibot
 ```
