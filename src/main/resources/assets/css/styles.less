@@ -84,16 +84,15 @@ body {
     }
   }
 
-  &.reply {
+  &.reply-freeform,
+  &.reply:not(.reply-freeform).bubble-picked {
     border-radius: 5px 5px 0 5px !important;
 
-    .bubble-content {
-      .bubble-button {
-        padding: 6px 12px;
-        border-radius: 5px 5px 0 5px !important;
-        color: black;
-        background: rgba(239,253,222,1);
-      }
+    .bubble-content .bubble-button {
+      padding: 6px 12px !important;
+      border-radius: 5px 5px 0 5px !important;
+      color: black;
+      background: rgba(239,253,222,1);
     }
 
     &::after {
@@ -108,10 +107,31 @@ body {
   }
 }
 
-.bubble.reply:not(.bubble-picked) .bubble-content .bubble-button:hover,
-.bubble.reply .bubble-content .bubble-button.bubble-pick {
-  padding: 6px 12px;
-  background: rgba(239,253,222,1);
+&.reply:not(.reply-freeform) {
+  box-shadow: none;
+  .bubble-content .bubble-button {
+    padding: 6px 12px !important;
+    border-radius: 5px !important;
+    color: white;
+    background-color: rgba(0,0,0,0.5);
+    box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.2);
+
+    &:hover {
+      background: rgba(239,253,222,1) !important;
+      color: black;
+    }
+  }
+
+  &.bubble-picked {
+    width: min-content !important;
+    white-space: nowrap;
+    .bubble-content .bubble-button {
+      margin: 0;
+      &:not(.bubble-pick) {
+        display: none !important;
+      }
+    }
+  }
 }
 
 .bubble.reply.reply-freeform.say .bubble-content .bubble-button {
@@ -122,6 +142,7 @@ body {
   .bubble-container {
     .bubble-wrap {
       margin-bottom: 10px;
+      padding-top: 18px;
     }
 
     .input-wrap {
