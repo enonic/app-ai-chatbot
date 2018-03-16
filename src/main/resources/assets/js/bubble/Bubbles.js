@@ -76,7 +76,7 @@ function Bubbles(container, self, options) {
     var inputWrap = document.createElement("div")
     inputWrap.className = "input-wrap"
     var inputText = document.createElement("textarea")
-    inputText.setAttribute("placeholder", "Ask me anything...")
+    inputText.setAttribute("placeholder", "Write a message…")
     inputWrap.appendChild(inputText)
     inputText.addEventListener("keypress", function(e) {
       // register user input
@@ -106,7 +106,6 @@ function Bubbles(container, self, options) {
       }
     })
     container.appendChild(inputWrap)
-    bubbleWrap.style.paddingBottom = "100px"
     inputText.focus()
   }
   inputCallbackFn ? this.typeInput(inputCallbackFn) : false
