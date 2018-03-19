@@ -57,6 +57,3 @@ var model = require('../js/model');
 
     }
 })();
-
-
-

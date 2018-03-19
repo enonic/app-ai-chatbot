@@ -1,0 +1,14 @@
+extends: stylelint-config-standard
+rules:
+  indentation: 2
+  selector-pseudo-class-no-unknown: true
+  unit-whitelist:
+  - - em
+    - rem
+    - "%"
+    - s
+    - ms
+    - px
+  - ignoreProperties:
+      px:
+      - background-position

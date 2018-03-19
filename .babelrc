@@ -1,0 +1,12 @@
+{
+  "presets": [
+    ["env", {
+      "targets": {
+        "browsers": ["firefox >= 58", "chrome >= 63"]
+      },
+      "cacheDirectory": true,
+      "modules": false,
+      "loose": true
+    }]
+  ]
+}
