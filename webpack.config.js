@@ -58,6 +58,7 @@ module.exports = {
             swSrc: path.join(assetsPath, 'js/sw-dev.js'),
             swDest: path.join(buildPwaLibPath, 'sw-template.js')
         })
-    ]
+    ],
+    devtool: 'source-map'
 
 };
