@@ -6,10 +6,9 @@ out/
 
 .gradle/
 .xp/
-
-build/
-
 node_modules/
-
 /rasa/logs/*.log
 __pycache__
+npm-debug.log
+
+build/

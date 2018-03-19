@@ -2,6 +2,8 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const WorkboxPlugin = require('workbox-webpack-plugin');
 const path = require('path');
 
+const isDev = process.env.NODE_ENV !== 'production';
+
 const paths = {
     assets: 'src/main/resources/assets/',
     buildAssets: 'build/resources/main/assets/',
@@ -29,9 +31,9 @@ module.exports = {
                     fallback: 'style-loader',
                     publicPath: '../',
                     use: [
-                        { loader: 'css-loader', options: { sourceMap: true, importLoaders: 1 } },
-                        { loader: 'postcss-loader', options: { sourceMap: true, config: { path: 'postcss.config.js' } } },
-                        { loader: 'less-loader', options: { sourceMap: true } }
+                        { loader: 'css-loader', options: { sourceMap: isDev, importLoaders: 1 } },
+                        { loader: 'postcss-loader', options: { sourceMap: isDev } },
+                        { loader: 'less-loader', options: { sourceMap: isDev } }
                     ]
                 })
             },
@@ -59,6 +61,6 @@ module.exports = {
             swDest: path.join(buildPwaLibPath, 'sw-template.js')
         })
     ],
-    devtool: 'source-map'
+    devtool: isDev ? 'source-map' : false
 
 };

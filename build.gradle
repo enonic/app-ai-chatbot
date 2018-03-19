@@ -12,8 +12,8 @@ app {
 }
 
 node {
-    download = true
-    version = '6.9.2'
+    download = false
+    version = '9.8.0'
 }
 
 dependencies {
@@ -32,12 +32,23 @@ repositories {
     xp.enonicRepo()
 }
 
-task webpack(type: NodeTask) {
-    script = file('node_modules/webpack/bin/webpack.js')
+println "Environment is set to '${nodeEnvironment()}'"
+
+task lint( type: NpmTask, dependsOn: npmInstall ) {
+    args = [ 'run', 'lint' ]
+    inputs.files fileTree( dir: 'modules', include: '**/src/main/**.*' )
+    outputs.dir file('gradle')
+    outputs.upToDateWhen { false }
 }
 
-// processes your package.json before running webpack
-webpack.dependsOn 'npmInstall'
-webpack.dependsOn 'processResources'
+task webpack( type: NpmTask, dependsOn: [lint, processResources] ) {
+    args = [ 'run', 'build' ]
+}
 
 jar.dependsOn webpack
+
+def nodeEnvironment() {
+    def environments = [ prod : 'production', dev: 'development' ]
+    def nodeEnv = environments[hasProperty( 'env' ) ? env : 'dev']
+    return nodeEnv != null ? nodeEnv : 'development'
+}

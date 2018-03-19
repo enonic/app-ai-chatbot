@@ -1,2 +1,7 @@
 rasa/
+build/
+gradle/
 src/main/resources/assets/precache/
+src/main/resources/assets/js/bubble/
+webpack.config.js
+postcss.config.js
