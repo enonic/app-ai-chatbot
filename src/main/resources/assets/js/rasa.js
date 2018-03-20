@@ -2,7 +2,8 @@ let responseListeners = [];
 
 const actions = {
   ACTION_LISTEN: 'action_listen',
-  ASK_PRICE: 'utter_ask_price'
+  ASK_PRICE: 'utter_ask_price',
+  ON_IT: 'utter_on_it'
 };
 
 function postAjax(url, data, success) {
@@ -28,6 +29,7 @@ function notifyResponse(json) {
 }
 
 function message(query) {
+  console.log('RASA PARSE >>> query:', query);
   // eslint-disable-next-line no-undef
   postAjax(`${appUrl}/rasa/parse`, { query }, notifyResponse);
 }
@@ -40,6 +42,7 @@ function action(a, events) {
   if (events) {
     data.events = [].concat(events);
   }
+  console.log('RASA PARSE >>> query:', data);
   // eslint-disable-next-line no-undef
   postAjax(`${appUrl}/rasa/continue`, data, notifyResponse);
 }
@@ -51,8 +54,11 @@ function restart() {
 function init() {
   const xhr = new XMLHttpRequest();
   // eslint-disable-next-line no-undef
-  xhr.open('GET', `${appUrl}/rasa/init`);
-  xhr.send();
+  xhr.open('POST', `${appUrl}/rasa/init`);
+  xhr.setRequestHeader('Cache-Control', 'no-cache');
+  xhr.setRequestHeader('Pragma', 'no-cache');
+  xhr.setRequestHeader('Accept', '*/*');
+  xhr.send(null);
 }
 
 function onResponse(callback) {

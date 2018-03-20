@@ -15,7 +15,7 @@
     function showNotification() {
         var snackbarContainer = document.querySelector('#notification-bar');
         var data = {message: '{{title}} upgraded to the latest version'};
-        if (snackbarContainer.MaterialSnackbar) {
+        if (snackbarContainer && snackbarContainer.MaterialSnackbar) {
             snackbarContainer.MaterialSnackbar.showSnackbar(data);
         }
     }

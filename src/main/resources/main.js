@@ -94,7 +94,7 @@ router.get('/sw.js', swController.get);
 
 router.post('/rasa/parse', rasaParse);
 router.post('/rasa/continue', rasaContinue);
-router.get('/rasa/init', rasaInit);
+router.post('/rasa/init', rasaInit);
 
 exports.all = function(req) {
   return router.dispatch(req);
