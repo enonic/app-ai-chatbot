@@ -6,10 +6,12 @@ module.exports = {
   plugins: {
     'postcss-normalize': {},
     autoprefixer: {},
-    ...(isDev ? {} : {
-      'css-mqpacker': {},
-      'postcss-discard-comments': {},
-      cssnano: { discardUnused: true }
-    })
+    ...(isDev
+      ? {}
+      : {
+          'css-mqpacker': {},
+          'postcss-discard-comments': {},
+          cssnano: { discardUnused: true }
+        })
   }
 };

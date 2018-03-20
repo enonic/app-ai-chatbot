@@ -1,59 +1,55 @@
 require('../css/styles.less');
-var chat = require('../js/bubble/Bubbles');
-var rasa = require('../js/rasa');
-var model = require('../js/model');
+const chat = require('../js/bubble/Bubbles');
+const rasa = require('../js/rasa');
+const model = require('../js/model');
 
+(function main() {
+  let prevAction;
 
-(function () {
-
-    var prevAction;
-
-    var chatWindow = window.chatWindow = new chat.Bubbles(document.getElementById("chat"), "chatWindow", {
-        inputCallbackFn: function (o) {
-            rasa.message(o.input);
-        }
-    });
-
-    model.onButtonClick(function (response) {
-        rasa.action(prevAction, response);
-    });
-
-    rasa.restart();
-
-    rasa.onResponse(function (jsonResponse) {
-        if (jsonResponse.status !== 200) {
-            return;
-        }
-
-        var nextAction = JSON.parse(jsonResponse.body).next_action;
-
-        var template = getTemplateForRasaAction(nextAction);
-
-        if (template && rasa.actions.ACTION_LISTEN !== nextAction) {
-            chatWindow.talk({ice: template});
-           if(rasa.actions.ASK_PRICE != nextAction) {//TODO: check all actions with buttons
-                rasa.action(nextAction);
-           } else {
-               prevAction = nextAction;
-           }
-        } else {
-            console.log('RASA: ' + nextAction);
-        }
-
-    });
-
-    chatWindow.talk(
-        {
-            "ice": {
-                "says": ["Hi there!"]
-            }
-        }
-    );
-
-    function getTemplateForRasaAction(action) {
-        var template = model.templates[action];
-
-        return template || null;
-
+  const chatWindow = new chat.Bubbles(
+    document.getElementById('chat'),
+    'chatWindow',
+    {
+      inputCallbackFn(o) {
+        rasa.message(o.input);
+      }
     }
+  );
+  window.chatWindow = chatWindow;
+
+  const actionToTemplate = action => model.templates[action] || null;
+
+  model.onButtonClick(response => {
+    rasa.action(prevAction, response);
+  });
+
+  rasa.restart();
+
+  rasa.onResponse(jsonResponse => {
+    if (jsonResponse.status !== 200) {
+      return;
+    }
+
+    const nextAction = JSON.parse(jsonResponse.body).next_action;
+
+    const template = actionToTemplate(nextAction);
+
+    if (template && rasa.actions.ACTION_LISTEN !== nextAction) {
+      chatWindow.talk({ ice: template });
+      if (rasa.actions.ASK_PRICE !== nextAction) {
+        // TODO: check all actions with buttons
+        rasa.action(nextAction);
+      } else {
+        prevAction = nextAction;
+      }
+    } else {
+      console.log(`RASA: ${nextAction}`);
+    }
+  });
+
+  chatWindow.talk({
+    ice: {
+      says: ['Hi there!']
+    }
+  });
 })();

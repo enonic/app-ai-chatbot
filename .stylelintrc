@@ -2,6 +2,7 @@ extends: stylelint-config-standard
 rules:
   indentation: 2
   selector-pseudo-class-no-unknown: true
+  no-descending-specificity: null
   unit-whitelist:
   - - em
     - rem
@@ -9,6 +10,7 @@ rules:
     - s
     - ms
     - px
+    - deg
   - ignoreProperties:
       px:
       - background-position

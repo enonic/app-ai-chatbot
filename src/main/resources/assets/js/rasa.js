@@ -1,67 +1,66 @@
+let responseListeners = [];
+
+const actions = {
+  ACTION_LISTEN: 'action_listen',
+  ASK_PRICE: 'utter_ask_price'
+};
+
 function postAjax(url, data, success) {
-    var params = "data=" + JSON.stringify(data);
+  const params = `data=${JSON.stringify(data)}`;
 
-    var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
-    xhr.open('POST', url);
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState > 3 && xhr.status == 200) {
-            success(JSON.parse(xhr.responseText));
-        }
-    };
-    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.setRequestHeader('Accept', '*/*');
-    xhr.send(params);
-    return xhr;
+  const xhr = new XMLHttpRequest();
+  xhr.open('POST', url);
+  xhr.onreadystatechange = () => {
+    if (xhr.readyState > 3 && xhr.status === 200) {
+      success(JSON.parse(xhr.responseText));
+    }
+  };
+  xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  xhr.setRequestHeader('Accept', '*/*');
+  xhr.send(params);
+  return xhr;
 }
 
-function message(message) {
-    postAjax(appUrl + '/rasa/parse', {query: message}, notifyResponse);
+function notifyResponse(json) {
+  console.log('Response from rasa', json);
+  responseListeners.forEach(listener => listener(json));
 }
 
-function action(action, events) {
-    var data = {};
-    if (action) {
-        data.action = action;
-    }
-    if (events) {
-        data.events = [].concat(events);
-    }
-    postAjax(appUrl + '/rasa/continue', data, notifyResponse);
+function message(query) {
+  // eslint-disable-next-line no-undef
+  postAjax(`${appUrl}/rasa/parse`, { query }, notifyResponse);
+}
+
+function action(a, events) {
+  const data = {};
+  if (a) {
+    data.action = a;
+  }
+  if (events) {
+    data.events = [].concat(events);
+  }
+  // eslint-disable-next-line no-undef
+  postAjax(`${appUrl}/rasa/continue`, data, notifyResponse);
 }
 
 function restart() {
-    action(actions.ACTION_LISTEN, {"event": "restart"});
-}
-
-var responseListeners = [];
-
-function notifyResponse(json) {
-    console.log('Response from rasa', json);
-    for (var i = 0; i < responseListeners.length; i++) {
-        responseListeners[i](json);
-    }
+  action(actions.ACTION_LISTEN, { event: 'restart' });
 }
 
 function onResponse(callback) {
-    responseListeners.push(callback);
+  responseListeners.push(callback);
 }
 
 function unResponse(callback) {
-    responseListeners = responseListeners.filter(function (current) {
-        return current !== callback;
-    });
+  responseListeners = responseListeners.filter(current => current !== callback);
 }
 
-var actions = {
-    ACTION_LISTEN: 'action_listen', ASK_PRICE: 'utter_ask_price'
-};
-
 module.exports = {
-    message: message,
-    action: action,
-    restart: restart,
-    actions: actions,
-    onResponse: onResponse,
-    unResponse: unResponse
+  message,
+  action,
+  restart,
+  actions,
+  onResponse,
+  unResponse
 };

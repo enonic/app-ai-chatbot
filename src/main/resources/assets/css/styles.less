@@ -35,8 +35,9 @@ body {
     margin: 0;
     border-radius: unset;
     background: #fefefe;
-    box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.2);
     .default-font();
+
     overflow: hidden;
     resize: none;
   }
@@ -92,7 +93,7 @@ body {
       padding: 6px 12px !important;
       border-radius: 5px 5px 0 5px !important;
       color: black;
-      background: rgba(239,253,222,1);
+      background: rgba(239, 253, 222, 1) !important;
     }
 
     &::after {
@@ -102,22 +103,23 @@ body {
       bottom: 0;
       right: -6px;
       border: 6px solid transparent;
-      border-bottom: 8px solid rgba(239,253,222,1);
+      border-bottom: 8px solid rgba(239, 253, 222, 1);
     }
   }
 }
 
-&.reply:not(.reply-freeform) {
+.reply:not(.reply-freeform) {
   box-shadow: none;
+
   .bubble-content .bubble-button {
     padding: 6px 12px !important;
     border-radius: 5px !important;
     color: white;
-    background-color: rgba(0,0,0,0.5);
+    background-color: rgba(0, 0, 0, 0.5);
     box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.2);
 
     &:hover {
-      background: rgba(239,253,222,1) !important;
+      background: rgba(239, 253, 222, 1) !important;
       color: black;
     }
   }
@@ -125,8 +127,10 @@ body {
   &.bubble-picked {
     width: min-content !important;
     white-space: nowrap;
+
     .bubble-content .bubble-button {
       margin: 0;
+
       &:not(.bubble-pick) {
         display: none !important;
       }
@@ -138,7 +142,7 @@ body {
   margin: 0;
 }
 
-@media all and (min-width:750px) {
+@media all and (min-width: 750px) {
   .bubble-container {
     .bubble-wrap {
       margin-bottom: 10px;

@@ -16,6 +16,7 @@
     "server": "cd rasa && python -m rasa_core.server -d models/stories -u models/nlu/default/current -p 7454 --cors [*] -o logs/server.log --debug -v",
     "lint:js": "eslint . --fix",
     "lint:root": "eslint ./*.js -c src/main/resources/assets/js/.eslintrc.js --no-ignore --fix",
+    "lint:less": "stylelint \"src/**/*.less\" --fix",
     "lint:css": "stylelint \"src/**/*.css\" --fix",
     "lint": "run-p -c lint:*",
     "precommit": "lint-staged"

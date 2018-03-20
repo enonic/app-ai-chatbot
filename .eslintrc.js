@@ -38,5 +38,7 @@ module.exports = {
     app: false,
     CONFIG: false,
     resolve: false,
+    log: false,
+    importScripts: false,
   }
 }
