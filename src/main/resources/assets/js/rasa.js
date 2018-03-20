@@ -48,6 +48,13 @@ function restart() {
   action(actions.ACTION_LISTEN, { event: 'restart' });
 }
 
+function init() {
+  const xhr = new XMLHttpRequest();
+  // eslint-disable-next-line no-undef
+  xhr.open('GET', `${appUrl}/rasa/init`);
+  xhr.send();
+}
+
 function onResponse(callback) {
   responseListeners.push(callback);
 }
@@ -60,6 +67,7 @@ module.exports = {
   message,
   action,
   restart,
+  init,
   actions,
   onResponse,
   unResponse

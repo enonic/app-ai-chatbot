@@ -50,12 +50,6 @@ var sendToRasa = function(params, method, action) {
   };
 };
 
-function isRestart(events) {
-  return events.some(function(ev) {
-    return ev.event === 'restart';
-  });
-}
-
 function resetSessionId() {
   sessionId = new Date().getTime();
 }
@@ -79,12 +73,8 @@ function rasaContinue(req) {
     events: events
   };
 
-  if (isRestart(events)) {
-    resetSessionId();
-  }
-
   log.info(
-    'RASA CONTINUE >>> action: ' +
+    'RASA CONTINUE >>> executed_action: ' +
       action +
       ', events: ' +
       JSON.stringify(events)
@@ -93,12 +83,18 @@ function rasaContinue(req) {
   return sendToRasa(body, 'POST', 'continue');
 }
 
+function rasaInit() {
+  resetSessionId();
+  log.info('Setting session id: ' + sessionId);
+}
+
 router.get('/', renderPage('main.html'));
 
 router.get('/sw.js', swController.get);
 
 router.post('/rasa/parse', rasaParse);
 router.post('/rasa/continue', rasaContinue);
+router.get('/rasa/init', rasaInit);
 
 exports.all = function(req) {
   return router.dispatch(req);

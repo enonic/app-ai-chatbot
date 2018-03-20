@@ -23,7 +23,7 @@ const model = require('../js/model');
     rasa.action(prevAction, response);
   });
 
-  rasa.restart();
+  rasa.init(); // init session id
 
   rasa.onResponse(jsonResponse => {
     if (jsonResponse.status !== 200) {
