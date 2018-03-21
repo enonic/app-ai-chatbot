@@ -42,7 +42,7 @@ function action(a, events) {
   if (events) {
     data.events = [].concat(events);
   }
-  console.log('RASA PARSE >>> query:', data);
+  console.log('RASA CONTINUE >>> executed_action:', data);
   // eslint-disable-next-line no-undef
   postAjax(`${appUrl}/rasa/continue`, data, notifyResponse);
 }

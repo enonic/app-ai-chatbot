@@ -43,7 +43,7 @@ gradle deploy
 
 First we need to start rasa server by navigating to the project root and typing in console:
 ```
-npm run rasa-server
+npm run server
 ```
 After server is up and running login to Enonic XP and navigate to:
 ```

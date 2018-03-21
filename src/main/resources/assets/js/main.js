@@ -35,7 +35,11 @@ const model = require('../js/model');
     const template = actionToTemplate(nextAction);
 
     if (template && rasa.actions.ACTION_LISTEN !== nextAction) {
-      chatWindow.talk({ ice: template });
+      // not showing 'on it' action in chat window
+      if (rasa.actions.ON_IT !== nextAction) {
+        chatWindow.talk({ ice: template });
+      }
+
       if (rasa.actions.ASK_PRICE !== nextAction) {
         // TODO: check all actions with buttons
         rasa.action(nextAction);
