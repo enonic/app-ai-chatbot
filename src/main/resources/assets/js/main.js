@@ -56,4 +56,24 @@ const model = require('../js/model');
       says: ['Hi there!']
     }
   });
+
+  const statusElem = document.getElementById('status');
+  const textArea = document.querySelector('textarea');
+
+  const toggleOnlineStatus = function() {
+    if (navigator.onLine) {
+      statusElem.innerHTML = 'Online!';
+      statusElem.classList.remove('offline');
+      textArea.removeAttribute('disabled');
+    } else {
+      statusElem.classList.add('offline');
+      statusElem.innerHTML = 'Waiting for network';
+      textArea.setAttribute('disabled', 'disabled');
+    }
+  };
+
+  toggleOnlineStatus();
+
+  window.addEventListener('offline', toggleOnlineStatus);
+  window.addEventListener('online', toggleOnlineStatus);
 })();
