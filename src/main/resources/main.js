@@ -2,6 +2,7 @@ var mustacheLib = require('/lib/xp/mustache');
 var httpClient = require('/lib/http-client');
 var router = require('/lib/router')();
 var helper = require('/lib/helper');
+var init = require('/lib/init');
 var swController = require('/lib/pwa/sw-controller');
 var siteTitle = 'AI Bot';
 var sessionId;
@@ -87,6 +88,8 @@ function rasaInit() {
   resetSessionId();
   log.info('Setting session id: ' + sessionId);
 }
+
+init.initialize();
 
 router.get('/', renderPage('main.html'));
 
