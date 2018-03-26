@@ -24,11 +24,6 @@ workboxSW.router.setDefaultHandler({
 });
 
 workboxSW.router.registerRoute(
-  '{{baseUrl}}/about',
-  workboxSW.strategies.networkFirst()
-);
-
-workboxSW.router.registerRoute(
-  '{{baseUrl}}/contact',
+  '{{baseUrl}}/history',
   workboxSW.strategies.networkFirst()
 );

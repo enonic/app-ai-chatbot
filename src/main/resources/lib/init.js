@@ -1,25 +1,10 @@
 var repoLib = require('/lib/xp/repo');
 var contextLib = require('/lib/xp/context');
-var nodeLib = require('/lib/xp/node');
+var repo = require('/lib/repo');
 
-var REPO_NAME = 'aichatbot';
-var LOGS_PATH = '/logs';
-
-var ROOT_PERMISSIONS = [
-  {
-    principal: 'role:system.everyone',
-    allow: [
-      'READ',
-      'CREATE',
-      'MODIFY',
-      'DELETE',
-      'PUBLISH',
-      'READ_PERMISSIONS',
-      'WRITE_PERMISSIONS'
-    ],
-    deny: []
-  }
-];
+var REPO_NAME = repo.REPO_NAME;
+var LOGS_PATH = repo.LOGS_PATH;
+var ROOT_PERMISSIONS = repo.ROOT_PERMISSIONS;
 
 var createRepo = function() {
   log.info('Creating repository [' + REPO_NAME + ']...');
@@ -40,10 +25,7 @@ var nodeWithPathExists = function(repoConnection, path) {
 };
 
 var createLogsNode = function() {
-  var repoConn = nodeLib.connect({
-    repoId: REPO_NAME,
-    branch: 'master'
-  });
+  var repoConn = repo.connect();
 
   var logsExist = nodeWithPathExists(repoConn, LOGS_PATH);
 

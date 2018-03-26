@@ -3,6 +3,7 @@ var httpClient = require('/lib/http-client');
 var router = require('/lib/router')();
 var helper = require('/lib/helper');
 var init = require('/lib/init');
+var repo = require('/lib/repo');
 var swController = require('/lib/pwa/sw-controller');
 var siteTitle = 'AI Bot';
 var sessionId;
@@ -89,11 +90,27 @@ function rasaInit() {
   log.info('Setting session id: ' + sessionId);
 }
 
+function getHistory() {
+  var history = repo.loadHistory();
+
+  return {
+    body: JSON.stringify(history),
+    contentType: 'application/json'
+  };
+}
+
+function updateHistory(req) {
+  var message = JSON.parse(req.params.data);
+  repo.saveMessage(message);
+}
+
 init.initialize();
 
 router.get('/', renderPage('main.html'));
 
 router.get('/sw.js', swController.get);
+router.get('/history', getHistory);
+router.post('/history', updateHistory);
 
 router.post('/rasa/parse', rasaParse);
 router.post('/rasa/continue', rasaContinue);

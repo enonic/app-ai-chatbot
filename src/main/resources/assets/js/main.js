@@ -2,6 +2,7 @@ require('../css/styles.less');
 const chat = require('../js/bubble/Bubbles');
 const rasa = require('../js/rasa');
 const model = require('../js/model');
+const history = require('../js/history');
 
 (function main() {
   let prevAction;
@@ -12,12 +13,24 @@ const model = require('../js/model');
     {
       inputCallbackFn(o) {
         rasa.message(o.input);
+        history.updateHistory({
+          text: o.input,
+          isBot: false
+        });
       }
     }
   );
   window.chatWindow = chatWindow;
 
   const actionToTemplate = action => model.templates[action] || null;
+
+  const talk = template => {
+    chatWindow.talk({ ice: template });
+    history.updateHistory({
+      text: template.says[0],
+      isBot: true
+    });
+  };
 
   model.onButtonClick(response => {
     rasa.action(prevAction, response);
@@ -37,7 +50,7 @@ const model = require('../js/model');
     if (template && rasa.actions.ACTION_LISTEN !== nextAction) {
       // not showing 'on it' action in chat window
       if (rasa.actions.ON_IT !== nextAction) {
-        chatWindow.talk({ ice: template });
+        talk(template);
       }
 
       if (rasa.actions.ASK_PRICE !== nextAction) {
@@ -51,11 +64,12 @@ const model = require('../js/model');
     }
   });
 
-  chatWindow.talk({
-    ice: {
-      says: ['Hi there!']
-    }
-  });
+  const onHistoryLoaded = chatHistory => {
+    console.log('chat history:', chatHistory);
+  };
+  history.loadHistory(onHistoryLoaded);
+
+  talk({ says: ['Hi there!'] });
 
   const statusElem = document.getElementById('status');
   const textArea = document.querySelector('textarea');
