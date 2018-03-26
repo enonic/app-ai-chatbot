@@ -30,7 +30,7 @@ const model = require('../js/model');
       return;
     }
 
-    const nextAction = JSON.parse(jsonResponse.body).next_action;
+    const nextAction = jsonResponse.body.next_action;
 
     const template = actionToTemplate(nextAction);
 

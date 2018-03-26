@@ -6,11 +6,11 @@ const actions = {
   ON_IT: 'utter_on_it'
 };
 
-function postAjax(url, data, success) {
+function ajax(url, method, data, success) {
   const params = `data=${JSON.stringify(data)}`;
 
   const xhr = new XMLHttpRequest();
-  xhr.open('POST', url);
+  xhr.open(method, url);
   xhr.onreadystatechange = () => {
     if (xhr.readyState > 3 && xhr.status === 200) {
       success(JSON.parse(xhr.responseText));
@@ -24,6 +24,8 @@ function postAjax(url, data, success) {
 }
 
 function notifyResponse(json) {
+  // eslint-disable-next-line no-param-reassign
+  json.body = JSON.parse(json.body);
   console.log('Response from rasa', json);
   responseListeners.forEach(listener => listener(json));
 }
@@ -31,7 +33,13 @@ function notifyResponse(json) {
 function message(query) {
   console.log('RASA PARSE >>> query:', query);
   // eslint-disable-next-line no-undef
-  postAjax(`${appUrl}/rasa/parse`, { query }, notifyResponse);
+  ajax(`${appUrl}/rasa/parse`, 'POST', { query }, notifyResponse);
+}
+
+function status() {
+  console.log('RASA STATUS');
+  // eslint-disable-next-line no-undef
+  ajax(`${appUrl}/rasa/status`, 'GET', {}, notifyResponse);
 }
 
 function action(a, events) {
@@ -44,7 +52,7 @@ function action(a, events) {
   }
   console.log('RASA CONTINUE >>> executed_action:', data);
   // eslint-disable-next-line no-undef
-  postAjax(`${appUrl}/rasa/continue`, data, notifyResponse);
+  ajax(`${appUrl}/rasa/continue`, 'POST', data, notifyResponse);
 }
 
 function restart() {
@@ -73,6 +81,7 @@ module.exports = {
   message,
   action,
   restart,
+  status,
   init,
   actions,
   onResponse,

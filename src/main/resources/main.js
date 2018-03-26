@@ -28,6 +28,32 @@ var renderPage = function(pageName) {
   };
 };
 
+var sendToPython = function(query) {
+  var url = 'http://localhost:7454/bot';
+
+  var rasaResponse = httpClient.request({
+    url: url,
+    method: 'POST',
+    headers: {
+      'Cache-Control': 'no-cache',
+      Accept: '*/*'
+    },
+    connectionTimeout: 20000,
+    readTimeout: 5000,
+    body: JSON.stringify({
+      sender: sessionId,
+      message: query
+    }),
+    contentType: 'application/json'
+  });
+  return {
+    body: rasaResponse,
+    action: 'parse',
+    contentType: 'application/json',
+    status: rasaResponse.status
+  };
+};
+
 var sendToRasa = function(params, method, action) {
   var url = helper.getRasaUrl(sessionId) + action;
 
@@ -55,14 +81,20 @@ function resetSessionId() {
   sessionId = new Date().getTime();
 }
 
+function rasaStatus() {
+  log.info('RASA STATUS');
+  return sendToRasa({}, 'GET', 'tracker');
+}
+
 function rasaParse(req) {
   var data = JSON.parse(req.params.data);
   var query = data.query;
-  var body = {
-    query: query
-  };
+  // var body = {
+  //   query: query
+  // };
   log.info('RASA PARSE >>> query: ' + query);
-  return sendToRasa(body, 'POST', 'parse');
+  // return sendToRasa(body, 'POST', 'parse');
+  return sendToPython(query);
 }
 
 function rasaContinue(req) {
@@ -96,6 +128,7 @@ router.get('/', renderPage('main.html'));
 router.get('/sw.js', swController.get);
 
 router.post('/rasa/parse', rasaParse);
+router.get('/rasa/status', rasaStatus);
 router.post('/rasa/continue', rasaContinue);
 router.post('/rasa/init', rasaInit);
 
