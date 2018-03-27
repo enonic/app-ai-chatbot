@@ -34,7 +34,6 @@ const history = require('../js/history');
 
       if (!buttonRegex.test(message)) {
         bot.botTalk(message, {});
-        history.updateHistory({ text: message, isBot: true });
       } else {
         buttons.push(buttonRegex.exec(message)[1]);
       }
@@ -52,21 +51,20 @@ const history = require('../js/history');
         if (Array.isArray(session.messages)) {
           session.messages.forEach(message => {
             if (message.user === 'bot') {
-              bot.botTalk(message.text);
+              bot.botTalkNoHistory(message.text);
             } else {
               bot.selfTalk(message.text);
             }
           });
         } else if (session.messages.user === 'bot') {
-          bot.botTalk(session.messages.text);
+          bot.botTalkNoHistory(session.messages.text);
         } else {
           bot.selfTalk(session.messages.text);
         }
       });
     }
 
-    bot.botTalk('Hi there!');
-    history.updateHistory({ text: 'Hi there!', isBot: true, isNew: true });
+    bot.botTalk('Hi there!', null, true);
   };
   history.loadHistory(onHistoryLoaded);
 })();
