@@ -125,7 +125,10 @@ export function renderMessage(bot, say, reply, type) {
   const classNames = `chat-message-feed__message chat-message-feed__message--${type} ${
     hasReply ? 'chat-message-feed__message--reply' : ''
   }`;
-  const text = `<div class="chat-message-feed__message-text">${say}</div>`;
+  const text =
+    say && say.length > 0
+      ? `<div class="chat-message-feed__message-text">${say}</div>`
+      : '';
   const message = createElement(classNames, text + options);
   feed.appendChild(message);
 }

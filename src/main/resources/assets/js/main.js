@@ -2,7 +2,6 @@ import Bot from './chat/bot';
 
 require('../css/styles.less');
 const rasa = require('../js/rasa');
-const model = require('../js/model');
 const history = require('../js/history');
 
 (function main() {
@@ -12,11 +11,6 @@ const history = require('../js/history');
       rasa.message(text);
       history.updateHistory({ text, isBot: false });
     }
-  });
-
-  // eslint-disable-next-line no-unused-vars
-  model.onButtonClick(response => {
-    rasa.message('button_text'); // TODO
   });
 
   rasa.onResponse(messages => {
@@ -33,8 +27,22 @@ const history = require('../js/history');
       }
       uniqueMessages = Object.keys(uniques);
     }
+    const buttonRegex = RegExp('^\\d+:\\s(.+)\\s\\((.+)\\)$');
+
+    const buttons = [];
+
     while (uniqueMessages && uniqueMessages.length > 0) {
-      bot.botTalk(uniqueMessages.splice(0, 1)[0], {});
+      const message = uniqueMessages.splice(0, 1)[0];
+
+      if (!buttonRegex.test(message)) {
+        bot.botTalk(message, {});
+      } else {
+        buttons.push(buttonRegex.exec(message)[1]);
+      }
+    }
+
+    if (buttons.length > 0) {
+      bot.botTalk(null, buttons);
     }
   });
 
