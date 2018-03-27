@@ -34,6 +34,7 @@ const history = require('../js/history');
 
       if (!buttonRegex.test(message)) {
         bot.botTalk(message, {});
+        history.updateHistory({ text: message, isBot: true });
       } else {
         buttons.push(buttonRegex.exec(message)[1]);
       }
@@ -46,10 +47,28 @@ const history = require('../js/history');
 
   const onHistoryLoaded = chatHistory => {
     console.log('chat history:', chatHistory);
+    if (chatHistory) {
+      chatHistory.forEach(session => {
+        if (Array.isArray(session.messages)) {
+          session.messages.forEach(message => {
+            if (message.user === 'bot') {
+              bot.botTalk(message.text);
+            } else {
+              bot.selfTalk(message.text);
+            }
+          });
+        } else if (session.messages.user === 'bot') {
+          bot.botTalk(session.messages.text);
+        } else {
+          bot.selfTalk(session.messages.text);
+        }
+      });
+    }
+
+    bot.botTalk('Hi there!');
+    history.updateHistory({ text: 'Hi there!', isBot: true, isNew: true });
   };
   history.loadHistory(onHistoryLoaded);
-
-  bot.botTalk('Hi there!');
 
   const statusElem = document.getElementById('status');
   const textArea = document.querySelector('textarea');

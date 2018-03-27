@@ -54,6 +54,7 @@ function doSaveMessage(message, user) {
   var repoConn = connect();
   var messageNode = getMessageNode(repoConn, user);
   var convertedMessage = convertMessage(message, user);
+  // var createdNode;
 
   log.info('Saving ' + JSON.stringify(message));
 
@@ -62,8 +63,17 @@ function doSaveMessage(message, user) {
     repoConn.modify({
       key: messageNode._id,
       editor: function(node) {
-        // eslint-disable-next-line no-param-reassign
-        node.log = [].concat(node.log, convertedMessage);
+        // eslint-disable-next-line no-unused-expressions
+        message.isNew // eslint-disable-next-line no-param-reassign
+          ? (node.log = [].concat(node.log, {
+              messages: [convertedMessage]
+            })) // eslint-disable-next-line no-param-reassign
+          : (node.log = [].concat([].concat(node.log).slice(0, -1), {
+              messages: [
+                [].concat(node.log)[[].concat(node.log).length - 1].messages,
+                convertedMessage
+              ]
+            }));
         return node;
       }
     });
@@ -72,7 +82,7 @@ function doSaveMessage(message, user) {
     repoConn.create({
       _parentPath: LOGS_PATH,
       _permissions: ROOT_PERMISSIONS,
-      log: [convertedMessage],
+      log: [{ messages: [convertedMessage] }],
       user: user.key
     });
   }
@@ -94,7 +104,11 @@ function doLoadHistory(user) {
   var messageNode = getMessageNode(repoConn, user);
 
   if (messageNode) {
-    return messageNode.log;
+    if (Array.isArray(messageNode.log)) {
+      return messageNode.log;
+    }
+
+    return [messageNode.log];
   }
 
   return null;
