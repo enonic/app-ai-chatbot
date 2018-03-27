@@ -42,6 +42,9 @@ export default function Bot(options = {}) {
   };
   this.botTalk = botTalk;
 
+  const botTalkNoHistory = say => talk(say, null, messageType.BOT);
+  this.botTalkNoHistory = botTalkNoHistory;
+
   const { sendCallback } = fullOptions;
   fullOptions.sendCallback = msg => {
     sendCallback(msg);
