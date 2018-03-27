@@ -17,6 +17,17 @@ body {
   background: url("../../img/chat-background.png") repeat #ebe8d7;
   font-family: 'Roboto', "Helvetica Neue", Helvetica, sans-serif;
   font-size: 20px;
+
+  &.offline {
+    .chat-input__send,
+    .chat-online-text {
+      display: none;
+    }
+
+    .chat-offline-text {
+      display: inline;
+    }
+  }
 }
 
 .chat-placeholder {
@@ -52,6 +63,10 @@ body {
   line-height: 26px;
   overflow: hidden;
   resize: none;
+
+  &:disabled {
+    background-color: #fdf1c1;
+  }
 }
 
 .chat-input__send {
@@ -85,13 +100,50 @@ body {
   opacity: 0;
 }
 
+.chat-status-bar {
+  position: absolute;
+  top: 0;
+  box-sizing: border-box;
+  width: 100%;
+  height: 46px;
+  padding: 10px 0;
+  background-color: #e4e0cd;
+  text-align: center;
+  box-shadow: 0 1px 3px 1px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  user-select: none;
+}
+
+@keyframes slideUp {
+  0% {
+    line-height: 54px;
+    color: rgba(104, 98, 69, 0);
+  }
+
+  100% {
+    line-height: 26px;
+    color: rgba(104, 98, 69, 1);
+  }
+}
+
+.chat-status-bar__status {
+  color: rgba(104, 98, 69, 1);
+  font-size: 18px;
+  line-height: 26px;
+  animation: slideUp 0.3s ease-out;
+}
+
+.chat-offline-text {
+  display: none;
+}
+
 .chat-message-feed {
   position: absolute;
   left: 0;
   right: 0;
   box-sizing: border-box;
   height: 100%;
-  padding: 20px 12px 53px 53px;
+  padding: 56px 12px 53px 53px;
   border-bottom: 10px solid transparent;
   overflow-x: hidden;
   overflow-y: scroll;
@@ -202,6 +254,7 @@ body {
 
 .chat-message-feed__message-options {
   display: flex;
+  animation: pop 0.2s ease-in;
 }
 
 .chat-message-feed__message-option {
@@ -224,7 +277,8 @@ body {
 }
 
 @media screen and (min-width: 720px) {
-  .chat-wrapper {
+  .chat-wrapper,
+  .chat-status-bar__status {
     font-size: 16px;
   }
 
@@ -246,11 +300,12 @@ body {
   .chat-message-feed {
     left: -17px;
     right: -17px;
-    padding: 20px 43px 54px 79px;
+    padding: 56px 43px 54px 79px;
     border-bottom: 10px solid transparent;
   }
 
-  .chat-message-feed__message-text {
+  .chat-message-feed__message-text,
+  .chat-message-feed__message-option {
     font-size: 16px;
     line-height: 20px;
   }
