@@ -16,7 +16,7 @@ body {
 .chat-wrapper {
   background: url("../../img/chat-background.png") repeat #ebe8d7;
   font-family: 'Roboto', "Helvetica Neue", Helvetica, sans-serif;
-  font-size: 20px;
+  font-size: 16px;
 
   &.offline {
     .chat-input__send,
@@ -59,7 +59,7 @@ body {
   box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.2);
   outline: none;
   font-family: 'Roboto', "Helvetica Neue", Helvetica, sans-serif;
-  font-size: 20px;
+  font-size: 16px;
   line-height: 26px;
   overflow: hidden;
   resize: none;
@@ -128,8 +128,8 @@ body {
 
 .chat-status-bar__status {
   color: rgba(104, 98, 69, 1);
-  font-size: 18px;
-  line-height: 26px;
+  font-size: 16px;
+  line-height: 28px;
   animation: slideUp 0.3s ease-out;
 }
 
@@ -171,8 +171,8 @@ body {
   display: inline-block;
   box-sizing: border-box;
   width: 100%;
-  font-size: 20px;
-  line-height: 24px;
+  font-size: 16px;
+  line-height: 20px;
   box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.2), 7px 3px 15px 1px rgba(0, 0, 0, 0.1);
   animation: pop 0.2s ease-in;
 }
@@ -276,17 +276,11 @@ body {
 }
 
 @media screen and (min-width: 720px) {
-  .chat-wrapper,
-  .chat-status-bar__status {
-    font-size: 16px;
-  }
-
   .chat-input {
     padding: 0 3px 10px 3px;
   }
 
   .chat-input__input {
-    font-size: 16px;
     border-radius: 3px;
     box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.2);
   }
@@ -301,12 +295,6 @@ body {
     right: -17px;
     padding: 56px 43px 54px 79px;
     border-bottom: 10px solid transparent;
-  }
-
-  .chat-message-feed__message-text,
-  .chat-message-feed__message-option {
-    font-size: 16px;
-    line-height: 20px;
   }
 
   .chat-message-feed__message--bot,
