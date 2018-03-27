@@ -17,8 +17,6 @@ const model = require('../js/model');
   );
   window.chatWindow = chatWindow;
 
-  const actionToTemplate = action => model.templates[action] || null;
-
   model.onButtonClick(response => {
     rasa.action(prevAction, response);
   });
@@ -30,24 +28,15 @@ const model = require('../js/model');
       return;
     }
 
-    const nextAction = jsonResponse.body.next_action;
+    const messages = jsonResponse.body;
 
-    const template = actionToTemplate(nextAction);
-
-    if (template && rasa.actions.ACTION_LISTEN !== nextAction) {
-      // not showing 'on it' action in chat window
-      if (rasa.actions.ON_IT !== nextAction) {
-        chatWindow.talk({ ice: template });
-      }
-
-      if (rasa.actions.ASK_PRICE !== nextAction) {
-        // TODO: check all actions with buttons
-        rasa.action(nextAction);
-      } else {
-        prevAction = nextAction;
-      }
-    } else {
-      console.log(`RASA: ${nextAction}`);
+    while (messages && messages.length > 0) {
+      const message = messages.splice(0, 1);
+      chatWindow.talk({
+        ice: {
+          says: message
+        }
+      });
     }
   });
 
