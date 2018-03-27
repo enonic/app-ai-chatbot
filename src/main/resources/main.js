@@ -6,7 +6,6 @@ var init = require('/lib/init');
 var repo = require('/lib/repo');
 var swController = require('/lib/pwa/sw-controller');
 var siteTitle = 'AI Bot';
-var sessionId;
 
 var renderPage = function(pageName) {
   return function() {
@@ -29,65 +28,35 @@ var renderPage = function(pageName) {
   };
 };
 
-var sendToRasa = function(params, method, action) {
-  var url = helper.getRasaUrl(sessionId) + action;
-
+var sendToRasaCore = function(query, sender) {
   var rasaResponse = httpClient.request({
-    url: url,
-    method: method,
+    url: helper.getRasaUrl(),
+    method: 'POST',
     headers: {
       'Cache-Control': 'no-cache',
       Accept: '*/*'
     },
     connectionTimeout: 20000,
     readTimeout: 5000,
-    body: JSON.stringify(params),
-    contentType: 'text/plain'
+    body: JSON.stringify({
+      message: query,
+      sender: sender
+    }),
+    contentType: 'application/json'
   });
+  log.info('RASA RESPONSE >>> ' + JSON.stringify(rasaResponse));
   return {
-    body: rasaResponse,
-    action: action,
+    body: rasaResponse.body,
     contentType: 'application/json',
     status: rasaResponse.status
   };
 };
 
-function resetSessionId() {
-  sessionId = new Date().getTime();
-}
-
 function rasaParse(req) {
   var data = JSON.parse(req.params.data);
   var query = data.query;
-  var body = {
-    query: query
-  };
-  log.info('RASA PARSE >>> query: ' + query);
-  return sendToRasa(body, 'POST', 'parse');
-}
-
-function rasaContinue(req) {
-  var data = JSON.parse(req.params.data);
-  var action = data.action;
-  var events = data.events || [];
-  var body = {
-    executed_action: action,
-    events: events
-  };
-
-  log.info(
-    'RASA CONTINUE >>> executed_action: ' +
-      action +
-      ', events: ' +
-      JSON.stringify(events)
-  );
-
-  return sendToRasa(body, 'POST', 'continue');
-}
-
-function rasaInit() {
-  resetSessionId();
-  log.info('Setting session id: ' + sessionId);
+  var sender = data.sender;
+  return sendToRasaCore(query, sender);
 }
 
 function getHistory() {
@@ -107,14 +76,11 @@ function updateHistory(req) {
 init.initialize();
 
 router.get('/', renderPage('main.html'));
-
 router.get('/sw.js', swController.get);
 router.get('/history', getHistory);
 router.post('/history', updateHistory);
 
 router.post('/rasa/parse', rasaParse);
-router.post('/rasa/continue', rasaContinue);
-router.post('/rasa/init', rasaInit);
 
 exports.all = function(req) {
   return router.dispatch(req);

@@ -4,8 +4,8 @@
       "slots": [
         "people",
         "location",
-        "price",
-        "cuisine"
+        "cuisine",
+        "price"
       ]
     }
   },

@@ -6,8 +6,6 @@ const model = require('../js/model');
 const history = require('../js/history');
 
 (function main() {
-  let prevAction;
-
   const bot = new Bot({
     parent: document.body,
     sendCallback: text => {
@@ -16,39 +14,27 @@ const history = require('../js/history');
     }
   });
 
-  const actionToTemplate = action => model.templates[action] || null;
-  const templateToMessage = template => template.says[0];
-  const templateToReply = template =>
-    template.reply ? template.reply.map(r => r.question) : null;
-
+  // eslint-disable-next-line no-unused-vars
   model.onButtonClick(response => {
-    rasa.action(prevAction, response);
+    rasa.message('button_text'); // TODO
   });
 
-  rasa.init(); // init session id
-
-  rasa.onResponse(jsonResponse => {
-    if (jsonResponse.status !== 200) {
-      return;
-    }
-
-    const nextAction = JSON.parse(jsonResponse.body).next_action;
-
-    const template = actionToTemplate(nextAction);
-
-    if (template && rasa.actions.ACTION_LISTEN !== nextAction) {
-      // not showing 'on it' action in chat window
-      if (rasa.actions.ON_IT !== nextAction) {
-        bot.botTalk(templateToMessage(template), templateToReply(template));
-      }
-
-      if (rasa.actions.ASK_PRICE !== nextAction) {
-        rasa.action(nextAction);
-      } else {
-        prevAction = nextAction;
-      }
+  rasa.onResponse(messages => {
+    let uniqueMessages;
+    if (!messages || messages.length === 0) {
+      uniqueMessages = ["Sorry, I'm not sure I understood you"];
     } else {
-      console.log(`RASA: ${nextAction}`);
+      // filter duplicates returned by RASA
+      const uniques = {};
+      for (const m in messages) {
+        if (!uniques[messages[m]]) {
+          uniques[messages[m]] = true;
+        }
+      }
+      uniqueMessages = Object.keys(uniques);
+    }
+    while (uniqueMessages && uniqueMessages.length > 0) {
+      bot.botTalk(uniqueMessages.splice(0, 1)[0], {});
     }
   });
 

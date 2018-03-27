@@ -4,14 +4,14 @@ exports.getAppUrl = function getAppUrl() {
   return portalLib.url({ path: '/app/' + app.name });
 };
 
-exports.getRasaUrl = function getRasaUrl(sessionId) {
+exports.getRasaUrl = function getRasaUrl() {
   var url = portalLib.url({ path: '/', type: 'absolute' });
   var firstIndex = url.indexOf(':');
   var lastIndex = url.lastIndexOf(':');
   if (firstIndex !== lastIndex && lastIndex >= 0) {
     url = url.substring(0, lastIndex) + ':7454/';
   }
-  return url + 'conversations/' + sessionId + '/';
+  return url + 'bot';
 };
 
 exports.getBaseUrl = function() {

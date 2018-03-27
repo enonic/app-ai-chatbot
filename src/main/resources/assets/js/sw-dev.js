@@ -20,7 +20,7 @@ workboxSW.precache([
 ]);
 
 workboxSW.router.setDefaultHandler({
-  handler: workboxSW.strategies.cacheFirst()
+  handler: workboxSW.strategies.networkOnly()
 });
 
 workboxSW.router.registerRoute(

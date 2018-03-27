@@ -6,11 +6,16 @@ from __future__ import unicode_literals
 import argparse
 import logging
 import warnings
+from flask import Blueprint, request, jsonify
 from policy import RestaurantPolicy
 from rasa_core import utils
 from rasa_core.actions import Action
 from rasa_core.agent import Agent
+from rasa_core.channels import HttpInputChannel
+from rasa_core.channels.channel import UserMessage
 from rasa_core.channels.console import ConsoleInputChannel
+from rasa_core.channels.direct import CollectingOutputChannel
+from rasa_core.channels.rest import HttpInputComponent
 from rasa_core.events import SlotSet
 from rasa_core.interpreter import RasaNLUInterpreter
 from rasa_core.policies.memoization import MemoizationPolicy
@@ -20,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 class RestaurantAPI(object):
     def search(self, info):
-        return "papi's pizza place"
+        return "<a href='www.google.com?q=papi%27s+pizza+place'>papi's pizza place</a>"
 
 
 class ActionSearchRestaurants(Action):
@@ -78,7 +83,7 @@ def train_nlu():
     return model_directory
 
 
-def run(serve_forever=True):
+def console(serve_forever=True):
     interpreter = RasaNLUInterpreter("models/nlu/default/current")
     agent = Agent.load("models/stories", interpreter=interpreter)
 
@@ -86,6 +91,40 @@ def run(serve_forever=True):
         agent.handle_channel(ConsoleInputChannel())
     return agent
 
+
+class SimpleWebBot(HttpInputComponent):
+    """A simple web bot that listens on a url and responds."""
+
+    def blueprint(self, on_new_message):
+        custom_webhook = Blueprint('custom_webhook', __name__)
+
+        @custom_webhook.route("/status", methods=['GET'])
+        def health():
+            return jsonify({"status": "ok"})
+
+        @custom_webhook.route("", methods=['POST'])
+        def receive():
+            payload = request.json
+            sender_id = payload.get("sender", None)
+            text = payload.get("message", None)
+            out = CollectingOutputChannel()
+            on_new_message(UserMessage(text, out, sender_id))
+            responses = [m for _, m in out.messages]
+            return jsonify(responses)
+
+        return custom_webhook
+
+
+def server(serve_forever=True):
+    # path to your NLU model
+    interpreter = RasaNLUInterpreter("models/nlu/default/current")
+    # path to your dialogues models
+    agent = Agent.load("models/stories", interpreter=interpreter)
+    # http api endpoint for responses
+    input_channel = SimpleWebBot()
+    if serve_forever:
+        agent.handle_channel(HttpInputChannel(7454, "/bot", input_channel))
+    return agent
 
 if __name__ == '__main__':
     utils.configure_colored_logging(loglevel="INFO")
@@ -95,7 +134,7 @@ if __name__ == '__main__':
 
     parser.add_argument(
         'task',
-        choices=["train-nlu", "train-stories", "run"],
+        choices=["train-nlu", "train-stories", "server", "console"],
         help="what the bot should do - e.g. run or train?")
     task = parser.parse_args().task
 
@@ -104,9 +143,10 @@ if __name__ == '__main__':
         train_nlu()
     elif task == "train-stories":
         train_stories()
-    elif task == "run":
-        run()
+    elif task == "server":
+        server()
+    elif task == 'console':
+        console()
     else:
-        warnings.warn("Need to pass either 'train-nlu', 'train-stories' or "
-                      "'run' to use the script.")
+        warnings.warn("Need to pass either 'train-nlu', 'train-stories', 'console' or 'server' to use the script.")
         exit(1)
