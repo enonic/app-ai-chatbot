@@ -36,6 +36,9 @@
     "url": "https://github.com/enonic/app-ai-chatbot/issues"
   },
   "homepage": "https://github.com/enonic/app-ai-chatbot#readme",
+  "dependencies": {
+    "autoresize": "0.1.0"
+  },
   "devDependencies": {
     "autoprefixer": "8.1.0",
     "babel-core": "^6.26.0",

@@ -1,5 +1,6 @@
+import Bot from './chat/bot';
+
 require('../css/styles.less');
-const chat = require('../js/bubble/Bubbles');
 const rasa = require('../js/rasa');
 const model = require('../js/model');
 const history = require('../js/history');
@@ -7,30 +8,18 @@ const history = require('../js/history');
 (function main() {
   let prevAction;
 
-  const chatWindow = new chat.Bubbles(
-    document.getElementById('chat'),
-    'chatWindow',
-    {
-      inputCallbackFn(o) {
-        rasa.message(o.input);
-        history.updateHistory({
-          text: o.input,
-          isBot: false
-        });
-      }
+  const bot = new Bot({
+    parent: document.body,
+    sendCallback: text => {
+      rasa.message(text);
+      history.updateHistory({ text, isBot: false });
     }
-  );
-  window.chatWindow = chatWindow;
+  });
 
   const actionToTemplate = action => model.templates[action] || null;
-
-  const talk = template => {
-    chatWindow.talk({ ice: template });
-    history.updateHistory({
-      text: template.says[0],
-      isBot: true
-    });
-  };
+  const templateToMessage = template => template.says[0];
+  const templateToReply = template =>
+    template.reply ? template.reply.map(r => r.question) : null;
 
   model.onButtonClick(response => {
     rasa.action(prevAction, response);
@@ -50,11 +39,10 @@ const history = require('../js/history');
     if (template && rasa.actions.ACTION_LISTEN !== nextAction) {
       // not showing 'on it' action in chat window
       if (rasa.actions.ON_IT !== nextAction) {
-        talk(template);
+        bot.botTalk(templateToMessage(template), templateToReply(template));
       }
 
       if (rasa.actions.ASK_PRICE !== nextAction) {
-        // TODO: check all actions with buttons
         rasa.action(nextAction);
       } else {
         prevAction = nextAction;
@@ -69,7 +57,7 @@ const history = require('../js/history');
   };
   history.loadHistory(onHistoryLoaded);
 
-  talk({ says: ['Hi there!'] });
+  bot.botTalk('Hi there!');
 
   const statusElem = document.getElementById('status');
   const textArea = document.querySelector('textarea');

@@ -4,7 +4,7 @@
     "browser"
   ],
   "loadEagerly": [
-    "src/main/resources/assets/js/**/*.js",
+    "src/**/*.js",
     "node_modules/**"
   ],
   "plugins": {
