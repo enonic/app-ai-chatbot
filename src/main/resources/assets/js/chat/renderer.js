@@ -1,5 +1,6 @@
 import autoresize from 'autoresize';
 import throttle from './utils';
+import { messageType } from './config';
 
 function createElement(classNames, innerHTML, type = 'div') {
   const div = document.createElement(type);
@@ -137,6 +138,8 @@ export function renderBot(sendCallback) {
 export function renderMessage(bot, say, reply, type) {
   const feed = getFeed(bot);
   const hasReply = !!reply && reply.length > 0;
+  const scrolledTillEnd =
+    feed.offsetHeight + feed.scrollTop >= feed.scrollHeight;
   const mapReply = options =>
     options.map(
       option => `<div class="chat-message-feed__message-option">${option}</div>`
@@ -157,4 +160,7 @@ export function renderMessage(bot, say, reply, type) {
       : '';
   const message = createElement(classNames, text + options);
   feed.appendChild(message);
+  if (scrolledTillEnd || type === messageType.SELF) {
+    feed.scrollTop = feed.scrollHeight;
+  }
 }

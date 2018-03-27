@@ -56,10 +56,10 @@ const history = require('../js/history');
               bot.selfTalk(message.text);
             }
           });
-        } else if (session.messages.user === 'bot') {
-          bot.botTalkNoHistory(session.messages.text);
+        } else if (session.user === 'bot') {
+          bot.botTalkNoHistory(session.text);
         } else {
-          bot.selfTalk(session.messages.text);
+          bot.selfTalk(session.text);
         }
       });
     }

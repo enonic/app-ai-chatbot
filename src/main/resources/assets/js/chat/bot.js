@@ -1,6 +1,6 @@
 import { options as defaultOptions, messageType } from './config';
 // eslint-disable-next-line no-unused-vars
-import { loadHistory, updateHistory } from '../history';
+import { loadHistory, updateHistory } from './../history';
 import validate from './validator';
 import { renderBot, renderMessage } from './renderer';
 
@@ -9,10 +9,6 @@ function validateAndRender(options) {
   const { parent, cacheLimit, sendCallback } = options;
 
   validate(parent);
-
-  // eslint-disable-next-line no-unused-vars
-  // const messages = loadHistory(cacheLimit);
-  // TODO: load old messages to the chat
 
   const botElement = renderBot(sendCallback);
 
