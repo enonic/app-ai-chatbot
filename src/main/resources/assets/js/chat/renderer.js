@@ -67,7 +67,7 @@ function addInputEventListeners(wrapper, sendCallback) {
         'chat-message-feed__message--reply'
       );
       if (hasReply) {
-        lastMessage.lastElementChild.remove();
+        lastMessage.remove();
         lastMessage.classList.remove('chat-message-feed__message--reply');
       }
 
@@ -105,7 +105,7 @@ function addFeedEventListeners(bot, sendCallback) {
     if (isOption) {
       const text = target.innerHTML;
       const message = target.parentElement.parentElement;
-      target.parentElement.remove();
+      target.parentElement.parentElement.remove();
       message.classList.remove('chat-message-feed__message--reply');
       sendCallback(text);
     }
