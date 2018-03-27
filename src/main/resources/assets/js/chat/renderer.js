@@ -14,10 +14,36 @@ function createElement(classNames, innerHTML, type = 'div') {
   return div;
 }
 
-function addInputEventListeners(input, sendCallback) {
-  const textarea = input.firstElementChild;
-  const button = input.lastElementChild;
-  const feed = input.previousElementSibling;
+const getFeed = element => element.querySelector('.chat-message-feed');
+const getUserInput = element => element.querySelector('.chat-input');
+const getTextArea = element => element.querySelector('.chat-input__input');
+const getSendButton = element => element.querySelector('.chat-input__send');
+
+function addStatusEventListeners(wrapper) {
+  const textarea = getTextArea(wrapper);
+  const sendButton = getSendButton(wrapper);
+
+  const toggleOnlineStatus = () => {
+    if (navigator.onLine) {
+      wrapper.classList.remove('offline');
+    } else {
+      wrapper.classList.add('offline');
+    }
+    textarea.disabled = !navigator.onLine;
+    sendButton.disabled = !navigator.onLine;
+  };
+
+  window.addEventListener('offline', toggleOnlineStatus);
+  window.addEventListener('online', toggleOnlineStatus);
+
+  toggleOnlineStatus();
+}
+
+function addInputEventListeners(wrapper, sendCallback) {
+  const textarea = getTextArea(wrapper);
+  const sendButton = getSendButton(wrapper);
+  const input = getUserInput(wrapper);
+  const feed = getFeed(wrapper);
 
   let wasEmpty = true;
   const toggleEmptyClass = throttle(event => {
@@ -65,12 +91,11 @@ function addInputEventListeners(input, sendCallback) {
   });
   autoresize(textarea, { minimumRows: 1, maximumRows: 5 });
 
-  button.addEventListener('click', send);
-
-  return input;
+  sendButton.addEventListener('click', send);
 }
 
-function addFeedEventListeners(feed, sendCallback) {
+function addFeedEventListeners(bot, sendCallback) {
+  const feed = getFeed(bot);
   feed.addEventListener('click', event => {
     const { target } = event;
     const isOption = target.classList.contains(
@@ -88,8 +113,11 @@ function addFeedEventListeners(feed, sendCallback) {
 
 export function renderBot(sendCallback) {
   const wrapper = createElement('chat-wrapper');
-  // TODO: Add status <div id="status" class="status"></div>
   wrapper.innerHTML = `
+  <div class="chat-status-bar">
+    <span class="chat-status-bar__status chat-online-text">Online</span>
+    <span class="chat-status-bar__status chat-offline-text">Waiting for network…</span>
+  </div>
   <div class="chat-placeholder">
     <div class="chat-message-feed"></div>
     <div class="chat-input chat-input--empty">
@@ -99,17 +127,15 @@ export function renderBot(sendCallback) {
   </div>
   `;
 
-  const input = wrapper.firstElementChild.lastElementChild;
-  addInputEventListeners(input, sendCallback);
-
-  const feed = wrapper.firstElementChild.firstElementChild;
-  addFeedEventListeners(feed, sendCallback);
+  addStatusEventListeners(wrapper);
+  addFeedEventListeners(wrapper, sendCallback);
+  addInputEventListeners(wrapper, sendCallback);
 
   return wrapper;
 }
 
 export function renderMessage(bot, say, reply, type) {
-  const feed = bot.firstElementChild.firstElementChild;
+  const feed = getFeed(bot);
   const hasReply = !!reply && reply.length > 0;
   const mapReply = options =>
     options.map(

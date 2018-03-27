@@ -1,6 +1,6 @@
 import { options as defaultOptions, messageType } from './config';
 // eslint-disable-next-line no-unused-vars
-import { loadHistory, updateHistory } from './../history';
+import { loadHistory, updateHistory } from '../history';
 import validate from './validator';
 import { renderBot, renderMessage } from './renderer';
 
