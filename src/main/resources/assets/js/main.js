@@ -21,10 +21,23 @@ const model = require('../js/model');
   });
 
   rasa.onResponse(messages => {
-    while (messages && messages.length > 0) {
+    let uniqueMessages;
+    if (!messages || messages.length === 0) {
+      uniqueMessages = ["Sorry, I'm not sure I understood you"];
+    } else {
+      // filter duplicates returned by RASA
+      const uniques = {};
+      for (const m in messages) {
+        if (!uniques[messages[m]]) {
+          uniques[messages[m]] = true;
+        }
+      }
+      uniqueMessages = Object.keys(uniques);
+    }
+    while (uniqueMessages && uniqueMessages.length > 0) {
       chatWindow.talk({
         ice: {
-          says: messages.splice(0, 1)
+          says: uniqueMessages.splice(0, 1)
         }
       });
     }
