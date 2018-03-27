@@ -4,8 +4,6 @@ const rasa = require('../js/rasa');
 const model = require('../js/model');
 
 (function main() {
-  let prevAction;
-
   const chatWindow = new chat.Bubbles(
     document.getElementById('chat'),
     'chatWindow',
@@ -17,24 +15,16 @@ const model = require('../js/model');
   );
   window.chatWindow = chatWindow;
 
+  // eslint-disable-next-line no-unused-vars
   model.onButtonClick(response => {
-    rasa.action(prevAction, response);
+    rasa.message('button_text'); // TODO
   });
 
-  rasa.init(); // init session id
-
-  rasa.onResponse(jsonResponse => {
-    if (jsonResponse.status !== 200) {
-      return;
-    }
-
-    const messages = jsonResponse.body;
-
+  rasa.onResponse(messages => {
     while (messages && messages.length > 0) {
-      const message = messages.splice(0, 1);
       chatWindow.talk({
         ice: {
-          says: message
+          says: messages.splice(0, 1)
         }
       });
     }

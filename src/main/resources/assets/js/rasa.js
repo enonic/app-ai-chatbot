@@ -1,10 +1,5 @@
 let responseListeners = [];
-
-const actions = {
-  ACTION_LISTEN: 'action_listen',
-  ASK_PRICE: 'utter_ask_price',
-  ON_IT: 'utter_on_it'
-};
+const sender = Date.now();
 
 function ajax(url, method, data, success) {
   const params = `data=${JSON.stringify(data)}`;
@@ -24,49 +19,13 @@ function ajax(url, method, data, success) {
 }
 
 function notifyResponse(json) {
-  // eslint-disable-next-line no-param-reassign
-  json.body = JSON.parse(json.body);
   console.log('Response from rasa', json);
   responseListeners.forEach(listener => listener(json));
 }
 
 function message(query) {
-  console.log('RASA PARSE >>> query:', query);
   // eslint-disable-next-line no-undef
-  ajax(`${appUrl}/rasa/parse`, 'POST', { query }, notifyResponse);
-}
-
-function status() {
-  console.log('RASA STATUS');
-  // eslint-disable-next-line no-undef
-  ajax(`${appUrl}/rasa/status`, 'GET', {}, notifyResponse);
-}
-
-function action(a, events) {
-  const data = {};
-  if (a) {
-    data.action = a;
-  }
-  if (events) {
-    data.events = [].concat(events);
-  }
-  console.log('RASA CONTINUE >>> executed_action:', data);
-  // eslint-disable-next-line no-undef
-  ajax(`${appUrl}/rasa/continue`, 'POST', data, notifyResponse);
-}
-
-function restart() {
-  action(actions.ACTION_LISTEN, { event: 'restart' });
-}
-
-function init() {
-  const xhr = new XMLHttpRequest();
-  // eslint-disable-next-line no-undef
-  xhr.open('POST', `${appUrl}/rasa/init`);
-  xhr.setRequestHeader('Cache-Control', 'no-cache');
-  xhr.setRequestHeader('Pragma', 'no-cache');
-  xhr.setRequestHeader('Accept', '*/*');
-  xhr.send(null);
+  ajax(`${appUrl}/rasa/parse`, 'POST', { query, sender }, notifyResponse);
 }
 
 function onResponse(callback) {
@@ -79,11 +38,6 @@ function unResponse(callback) {
 
 module.exports = {
   message,
-  action,
-  restart,
-  status,
-  init,
-  actions,
   onResponse,
   unResponse
 };
