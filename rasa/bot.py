@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 class RestaurantAPI(object):
     def search(self, info):
-        return "<a href='www.google.com?q=papi%27s+pizza+place'>papi's pizza place</a>"
+        return "<a href='http://www.google.com/search?btnI=1&q=papi%27s+pizza+place' target='_blank'>papi's pizza place</a>"
 
 
 class ActionSearchRestaurants(Action):

@@ -15,9 +15,7 @@ const history = require('../js/history');
 
   rasa.onResponse(messages => {
     let uniqueMessages;
-    if (!messages || messages.length === 0) {
-      uniqueMessages = ["Sorry, I'm not sure I understood you"];
-    } else {
+    if (messages && messages.length > 0) {
       // filter duplicates returned by RASA
       const uniques = {};
       for (const m in messages) {
