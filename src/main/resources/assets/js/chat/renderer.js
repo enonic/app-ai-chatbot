@@ -135,6 +135,12 @@ export function renderBot(sendCallback) {
   return wrapper;
 }
 
+export function renderSeparator(bot) {
+  const feed = getFeed(bot);
+  feed.appendChild(createElement('chat-message-feed__separator', '<hr/>'));
+  feed.scrollTop = feed.scrollHeight;
+}
+
 export function renderMessage(bot, say, reply, type) {
   const feed = getFeed(bot);
   const hasReply = !!reply && reply.length > 0;

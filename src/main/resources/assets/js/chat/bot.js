@@ -1,8 +1,8 @@
-import { options as defaultOptions, messageType } from './config';
+import { messageType, options as defaultOptions } from './config';
 // eslint-disable-next-line no-unused-vars
-import { loadHistory, updateHistory } from './../history';
+import { updateHistory } from './../history';
 import validate from './validator';
-import { renderBot, renderMessage } from './renderer';
+import { renderBot, renderMessage, renderSeparator } from './renderer';
 
 function validateAndRender(options) {
   // eslint-disable-next-line no-unused-vars
@@ -37,6 +37,10 @@ export default function Bot(options = {}) {
     updateHistory({ text: say, isBot: true, isNew });
   };
   this.botTalk = botTalk;
+
+  this.separator = () => {
+    renderSeparator(botElement);
+  };
 
   const botTalkNoHistory = say => talk(say, null, messageType.BOT);
   this.botTalkNoHistory = botTalkNoHistory;

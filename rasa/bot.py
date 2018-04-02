@@ -23,9 +23,18 @@ from rasa_core.policies.memoization import MemoizationPolicy
 logger = logging.getLogger(__name__)
 
 
-class RestaurantAPI(object):
-    def search(self, info):
-        return "<a href='http://www.google.com/search?btnI=1&q=papi%27s+pizza+place' target='_blank'>papi's pizza place</a>"
+class RestaurantAPI:
+    def __init__(self):
+        pass
+
+    def search(self, cuisine, location, people, price, info):
+        logger.info("RestaurantAPI.search: cuisine=%s, location=%s, people=%s, price=%s, info=%s", cuisine, location, people, price, info)
+        query = ("Cheap " if price == "lo" else "Expensive " if price == "hi" else "") + \
+                ("local" if cuisine is None else cuisine) + " restaurant " + \
+                ("nearby" if location is None else "in " + location) + " " + \
+                ("" if people is None else "for " + people + " ") + \
+                ("" if info is None else "and " + info)
+        return "<a href='http://www.google.com/search?q=" + query + "' target='_blank'>" + query + "</a>"
 
 
 class ActionSearchRestaurants(Action):
@@ -35,7 +44,8 @@ class ActionSearchRestaurants(Action):
     def run(self, dispatcher, tracker, domain):
         dispatcher.utter_message("looking for restaurants")
         restaurant_api = RestaurantAPI()
-        restaurants = restaurant_api.search(tracker.get_slot("cuisine"))
+        restaurants = restaurant_api.search(tracker.get_slot("cuisine"), tracker.get_slot("location"), tracker.get_slot("people"),
+                                            tracker.get_slot("price"), tracker.get_slot("info"))
         return [SlotSet("matches", restaurants)]
 
 
@@ -125,6 +135,7 @@ def server(serve_forever=True):
     if serve_forever:
         agent.handle_channel(HttpInputChannel(7454, "/bot", input_channel))
     return agent
+
 
 if __name__ == '__main__':
     utils.configure_colored_logging(loglevel="INFO")

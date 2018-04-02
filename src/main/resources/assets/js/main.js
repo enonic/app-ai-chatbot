@@ -63,7 +63,7 @@ const history = require('../js/history');
         }
       });
     }
-
+    bot.separator();
     bot.botTalk('Hi there!', null, true);
   };
   history.loadHistory(onHistoryLoaded);
