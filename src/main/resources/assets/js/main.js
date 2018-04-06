@@ -13,34 +13,26 @@ const history = require('../js/history');
     }
   });
 
-  rasa.onResponse(messages => {
+  rasa.onResponse(response => {
+    const msgs = response.messages;
     let uniqueMessages;
-    if (messages && messages.length > 0) {
+    if (msgs && msgs.length > 0) {
       // filter duplicates returned by RASA
       const uniques = {};
-      for (const m in messages) {
-        if (!uniques[messages[m]]) {
-          uniques[messages[m]] = true;
+      for (const m in msgs) {
+        if (msgs.hasOwnProperty(m)) {
+          const msg = msgs[m];
+          if (!uniques[msg.text]) {
+            uniques[msg.text] = msg;
+          }
         }
       }
-      uniqueMessages = Object.keys(uniques);
+      uniqueMessages = Object.values(uniques);
     }
-    const buttonRegex = RegExp('^\\d+:\\s(.+)\\s\\((.+)\\)$');
-
-    const buttons = [];
 
     while (uniqueMessages && uniqueMessages.length > 0) {
       const message = uniqueMessages.splice(0, 1)[0];
-
-      if (!buttonRegex.test(message)) {
-        bot.botTalk(message, {});
-      } else {
-        buttons.push(buttonRegex.exec(message)[1]);
-      }
-    }
-
-    if (buttons.length > 0) {
-      bot.botTalk(null, buttons);
+      bot.botTalk(message.text, message.buttons);
     }
   });
 
@@ -62,8 +54,8 @@ const history = require('../js/history');
           bot.selfTalk(session.text);
         }
       });
+      bot.separator();
     }
-    bot.separator();
     bot.botTalk('Hi there!', null, true);
   };
   history.loadHistory(onHistoryLoaded);

@@ -1,7 +1,13 @@
 let responseListeners = [];
 const sender = Date.now();
 
-function ajax(url, method, data, success) {
+const actions = {
+  ACTION_LISTEN: 'action_listen',
+  ASK_PRICE: 'utter_ask_price',
+  ON_IT: 'utter_on_it'
+};
+
+function postAjax(url, method, data, success) {
   const params = `data=${JSON.stringify(data)}`;
 
   const xhr = new XMLHttpRequest();
@@ -19,13 +25,29 @@ function ajax(url, method, data, success) {
 }
 
 function notifyResponse(json) {
-  console.log('Response from rasa', json);
+  console.log('RASA RESPONSE', json);
   responseListeners.forEach(listener => listener(json));
 }
 
 function message(query) {
   // eslint-disable-next-line no-undef
-  ajax(`${appUrl}/rasa/parse`, 'POST', { query, sender }, notifyResponse);
+  postAjax(`${appUrl}/rasa/parse`, 'POST', { query, sender }, notifyResponse);
+}
+
+function action(a, events) {
+  const data = {};
+  if (a) {
+    data.action = a;
+  }
+  if (events) {
+    data.events = [].concat(events);
+  }
+  // eslint-disable-next-line no-undef
+  postAjax(`${appUrl}/rasa/continue`, 'POST', data, notifyResponse);
+}
+
+function restart() {
+  action(actions.ACTION_LISTEN, { event: 'restart' });
 }
 
 function onResponse(callback) {
@@ -38,6 +60,9 @@ function unResponse(callback) {
 
 module.exports = {
   message,
+  action,
+  restart,
+  actions,
   onResponse,
   unResponse
 };

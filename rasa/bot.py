@@ -62,7 +62,7 @@ class ActionSuggest(Action):
         return []
 
 
-def train_stories(domain_file="domain.yml",
+def train_stories(domain_file="domain_remote.yml",
                   model_path="models/stories",
                   training_data_file="data/stories.md"):
     agent = Agent(domain_file,
