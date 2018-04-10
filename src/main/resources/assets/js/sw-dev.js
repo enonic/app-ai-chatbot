@@ -11,7 +11,7 @@ const workboxSW = new self.WorkboxSW({
 // This is a placeholder for manifest dynamically injected from webpack.config.js
 workboxSW.precache([]);
 
-// Here we precache urls that are generated dynamically in the main.js controller
+// Here we precache urls that are generated dynamically in the chat.js controller
 workboxSW.precache([
   '{{{preCacheRoot}}}',
   '{{baseUrl}}/manifest.json',

@@ -15,10 +15,13 @@ const buildAssetsPath = path.join(__dirname, paths.buildAssets);
 const buildPwaLibPath = path.join(__dirname, paths.buildPwaLib);
 
 module.exports = {
-  entry: path.join(assetsPath, 'js/main.js'),
+  entry: {
+    chat: path.join(assetsPath, 'js/chat.js'),
+    tool: path.join(assetsPath, 'js/tool/tool.js')
+  },
   output: {
     path: buildAssetsPath,
-    filename: 'precache/bundle.js'
+    filename: 'precache/bundle.[name].js'
   },
   resolve: {
     extensions: ['.js', '.less', '.css']

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{{title}}</title>
+    <link rel="stylesheet" type="text/css" href="{{precacheUrl}}/bundle.css" media="screen"/>
+    <script type="text/javascript" src="{{precacheUrl}}/bundle.tool.js" defer></script>
+
+    <style type="text/css">
+        h1 {
+            font-family: 'Roboto', "Helvetica Neue", Helvetica, sans-serif;
+            margin-bottom: 1em;
+            text-align: center;
+            font-size: 48px;
+            font-weight: 100;
+        }
+
+        #charts {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+
+        #charts li {
+            display: block;
+        }
+
+        #charts li canvas {
+            width: 400px;
+            height: 300px;
+        }
+
+        @media (max-width: 1200px) {
+            #charts li {
+                width: auto;
+                margin-bottom: 10px;
+            }
+        }
+
+        @media (min-width: 1200px) {
+            #charts li {
+                margin-bottom: 20px;
+            }
+
+            #charts li:not(.hero) {
+                width: 50%;
+                float: left;
+            }
+        }
+    </style>
+</head>
+<body>
+<h1>Chat bot admin</h1>
+<ul id="charts">
+    <li class="hero">
+        <canvas id="canvas-1"></canvas>
+    </li>
+    <li>
+        <canvas id="canvas-2"></canvas>
+    </li>
+    <li>
+        <canvas id="canvas-3"></canvas>
+    </li>
+</ul>
+
+{{{serviceWorker}}}
+</body>
+
+<!-- Appends the Launcher Panel to the document body -->
+<script>
+    var CONFIG = {
+        adminUrl: '{{adminUrl}}',
+        launcherUrl: '{{launcherUrl}}'
+    };
+
+    window.onload = function () {
+        createRadarChart('canvas-1', 'Radar chart');
+        createBarChart('canvas-2', 'Histogram chart');
+        createDoughnutChart('canvas-3', 'Doughnut chart');
+    };
+</script>
+
+</html>
