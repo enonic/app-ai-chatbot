@@ -56,27 +56,7 @@ function createMessageNode(repoConn, conversationNode, convertedMessage) {
   return repoConn.create({
     _parentPath: conversationNode._path,
     _permissions: ROOT_PERMISSIONS,
-    log: [{ messages: [convertedMessage] }]
-  });
-}
-
-function updateMessageNode(repoConn, key, isNew, convertedMessage) {
-  repoConn.modify({
-    key: key,
-    editor: function(node) {
-      // eslint-disable-next-line no-unused-expressions
-      isNew // eslint-disable-next-line no-param-reassign
-        ? (node.log = [].concat(node.log, {
-            messages: [convertedMessage]
-          })) // eslint-disable-next-line no-param-reassign
-        : (node.log = [].concat([].concat(node.log).slice(0, -1), {
-            messages: [
-              [].concat(node.log)[[].concat(node.log).length - 1].messages,
-              convertedMessage
-            ]
-          }));
-      return node;
-    }
+    message: convertedMessage
   });
 }
 
@@ -95,29 +75,16 @@ function getUserNode(repoConn, userId) {
 }
 
 function getConversationNode(repoConn, userNode, conversationId) {
+  var queryStr =
+    '_parentPath = "' +
+    userNode._path +
+    '" and conversationId = "' +
+    conversationId +
+    '"';
   var queryResult = repoConn.query({
     start: 0,
     count: 1,
-    query:
-      '_parentPath = "' +
-      userNode._path +
-      '" and conversationId = "' +
-      conversationId +
-      '"'
-  });
-
-  if (queryResult.count > 0) {
-    return repoConn.get(queryResult.hits[0].id);
-  }
-
-  return null;
-}
-
-function getMessageNode(repoConn, conversationNode) {
-  var queryResult = repoConn.query({
-    start: 0,
-    count: 1,
-    query: '_parentPath = "' + conversationNode._path + '"'
+    query: queryStr
   });
 
   if (queryResult.count > 0) {
@@ -160,20 +127,9 @@ function doSaveMessage(senderId, message, user) {
     conversationNode = createConversationNode(repoConn, userNode, senderId);
   }
 
-  var messageNode = getMessageNode(repoConn, conversationNode);
-
   var convertedMessage = convertMessage(message, user);
 
-  if (messageNode) {
-    updateMessageNode(
-      repoConn,
-      messageNode._id,
-      message.isNew,
-      convertedMessage
-    );
-  } else {
-    createMessageNode(repoConn, conversationNode, convertedMessage);
-  }
+  createMessageNode(repoConn, conversationNode, convertedMessage);
 }
 
 function saveMessage(senderId, message) {
@@ -187,10 +143,43 @@ function saveMessage(senderId, message) {
   doSaveMessage(senderId, message, user);
 }
 
+function saveConversationResults(senderId, result) {
+  var repoConn = connect();
+
+  var user = authLib.getUser();
+
+  if (!user) {
+    log.info('Unable to define user; Conversation results will not be saved');
+    return;
+  }
+
+  var userNode = getUserNode(repoConn, user.key);
+
+  if (!userNode) {
+    return;
+  }
+
+  var conversationNode = getConversationNode(
+    repoConn,
+    userNode,
+    "'" + senderId + "'"
+  );
+
+  if (conversationNode) {
+    repoConn.modify({
+      key: conversationNode._id,
+      editor: function(node) {
+        // eslint-disable-next-line no-param-reassign
+        node.conversationResults = result;
+        return node;
+      }
+    });
+  }
+}
+
 function doLoadHistory(user) {
   var repoConn = connect();
 
-  log.info('doLoadHistory');
   var userNode = getUserNode(repoConn, user.key);
 
   var messageNodes;
@@ -199,19 +188,14 @@ function doLoadHistory(user) {
     messageNodes = getMessageNodes(repoConn, userNode);
   }
 
-  log.info('messageNodes ' + JSON.stringify(messageNodes));
   if (messageNodes) {
     if (Array.isArray(messageNodes)) {
       var logs = messageNodes.map(function(messageNode) {
-        return Array.isArray(messageNode.log)
-          ? messageNode.log
-          : [messageNode.log];
+        return messageNode.message;
       });
-      return [].concat.apply([], logs);
-    } else if (messageNodes.log) {
-      return Array.isArray(messageNodes.log)
-        ? messageNodes.log
-        : [messageNodes.log];
+      return logs;
+    } else if (messageNodes.message) {
+      return [messageNodes.message];
     }
   }
 
@@ -230,6 +214,7 @@ function loadHistory() {
 }
 
 exports.saveMessage = saveMessage;
+exports.saveConversationResults = saveConversationResults;
 exports.loadHistory = loadHistory;
 exports.connect = connect;
 exports.REPO_NAME = REPO_NAME;
