@@ -10,8 +10,8 @@ function loadHistory(historyLoadedHandler) {
   xhr.send(null);
 }
 
-function updateHistory(message) {
-  const params = `data=${JSON.stringify(message)}`;
+function updateHistory(senderId, message) {
+  const params = `senderId='${senderId}'&data=${JSON.stringify(message)}`;
 
   const xhr = new XMLHttpRequest();
   // eslint-disable-next-line no-undef

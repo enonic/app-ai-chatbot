@@ -9,7 +9,7 @@ const history = require('../js/history');
     parent: document.body,
     sendCallback: text => {
       rasa.message(text);
-      history.updateHistory({ text, isBot: false });
+      history.updateHistory(rasa.getSender(), { text, isBot: false });
     }
   });
 
@@ -42,13 +42,13 @@ const history = require('../js/history');
       chatHistory.forEach(session => {
         if (Array.isArray(session.messages)) {
           session.messages.forEach(message => {
-            if (message.user === 'bot') {
+            if (message.author === 'bot') {
               bot.botTalkNoHistory(message.text);
             } else {
               bot.selfTalk(message.text);
             }
           });
-        } else if (session.user === 'bot') {
+        } else if (session.author === 'bot') {
           bot.botTalkNoHistory(session.text);
         } else {
           bot.selfTalk(session.text);
