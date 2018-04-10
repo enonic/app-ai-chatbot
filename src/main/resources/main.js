@@ -35,6 +35,9 @@ function doSearchRestaurants(tracker) {
   if (slots.people) {
     query += 'for ' + slots.people;
   }
+
+  repo.saveConversationResults(tracker.sender_id, slots);
+
   return {
     text:
       '<a href="https://www.google.com/search?q=' +
