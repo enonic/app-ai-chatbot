@@ -192,7 +192,7 @@ function getHistory() {
 
 function updateHistory(req) {
   var message = JSON.parse(req.params.data);
-  repo.saveMessage(message);
+  repo.saveMessage(req.params.senderId, message);
 }
 
 init.initialize();

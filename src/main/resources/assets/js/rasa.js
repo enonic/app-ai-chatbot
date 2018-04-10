@@ -58,11 +58,16 @@ function unResponse(callback) {
   responseListeners = responseListeners.filter(current => current !== callback);
 }
 
+function getSender() {
+  return sender;
+}
+
 module.exports = {
   message,
   action,
   restart,
   actions,
+  getSender,
   onResponse,
   unResponse
 };

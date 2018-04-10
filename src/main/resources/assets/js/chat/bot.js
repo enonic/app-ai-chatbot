@@ -3,6 +3,7 @@ import { messageType, options as defaultOptions } from './config';
 import { updateHistory } from './../history';
 import validate from './validator';
 import { renderBot, renderMessage, renderSeparator } from './renderer';
+import { getSender } from './../rasa';
 
 function validateAndRender(options) {
   // eslint-disable-next-line no-unused-vars
@@ -34,7 +35,7 @@ export default function Bot(options = {}) {
 
   const botTalk = (say, reply, isNew) => {
     talk(say, reply, messageType.BOT);
-    updateHistory({ text: say, isBot: true, isNew });
+    updateHistory(getSender(), { text: say, isBot: true, isNew });
   };
   this.botTalk = botTalk;
 
