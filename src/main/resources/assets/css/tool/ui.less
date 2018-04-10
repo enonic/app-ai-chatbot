@@ -1,0 +1,63 @@
+h1 {
+  font-family: 'Roboto', "Helvetica Neue", Helvetica, sans-serif;
+  margin-bottom: 1em;
+  text-align: center;
+  font-size: 48px;
+  font-weight: 100;
+}
+
+#charts {
+  padding: 0;
+  margin: 5%;
+  list-style: none;
+
+  li {
+    display: block;
+
+    & > div {
+      margin-bottom: 40px;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  #charts li {
+    width: auto;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 1200px) {
+  #charts li {
+    width: auto;
+
+    &.side {
+      & > div {
+        float: left;
+        width: 50%;
+      }
+    }
+  }
+}
+
+@media (min-width: 1200px) {
+  #charts {
+    &::after {
+      content: '';
+      display: table;
+      clear: both;
+      height: 0;
+    }
+
+    li {
+      float: left;
+
+      &.hero {
+        width: 70%;
+      }
+
+      &.side {
+        width: 30%;
+      }
+    }
+  }
+}
