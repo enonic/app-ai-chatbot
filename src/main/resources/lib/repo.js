@@ -48,7 +48,8 @@ function createConversationNode(repoConn, userNode, senderId) {
   return repoConn.create({
     _parentPath: userNode._path,
     _permissions: ROOT_PERMISSIONS,
-    conversationId: senderId
+    conversationId: senderId,
+    userId: userNode.userId
   });
 }
 
@@ -143,8 +144,8 @@ function saveMessage(senderId, message) {
   doSaveMessage(senderId, message, user);
 }
 
-// eslint-disable-next-line
-function getConversationResults(params) { // params: {userId, conversationId, startDate, endDate}
+// params: {userId, conversationId, startDate, endDate}
+function getConversationResults(params) {
   var repoConn = connect();
 
   var query = '';
@@ -208,10 +209,16 @@ function getConversationResults(params) { // params: {userId, conversationId, st
   return conversations.length > 0
     ? conversations
         .map(function(conversation) {
-          return conversation.conversationResults;
+          if (!conversation.conversationResults) {
+            return null;
+          }
+          var r = JSON.parse(JSON.stringify(conversation.conversationResults));
+          r.conversationId = conversation.conversationId;
+          r.userId = conversation.userId;
+          return r;
         })
         .filter(function(result) {
-          return result != null;
+          return result !== null;
         })
     : [];
 }
@@ -284,6 +291,7 @@ function loadHistory() {
 
 exports.saveMessage = saveMessage;
 exports.saveConversationResults = saveConversationResults;
+exports.getConversationResults = getConversationResults;
 exports.loadHistory = loadHistory;
 exports.connect = connect;
 exports.REPO_NAME = REPO_NAME;

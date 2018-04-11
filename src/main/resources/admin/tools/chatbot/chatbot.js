@@ -1,4 +1,3 @@
-var portalLib = require('/lib/xp/portal');
 var mustacheLib = require('/lib/xp/mustache');
 var adminLib = require('/lib/xp/admin');
 var helper = require('/lib/helper');
@@ -12,11 +11,6 @@ exports.get = function(req) {
 
   var params = {
     appUrl: helper.getAppUrl(),
-    baseUrl: helper.getBaseUrl(),
-    adminUrl: adminLib.getBaseUri(),
-    assetsUrl: portalLib.assetUrl({
-      path: ''
-    }),
     title: siteTitle,
     launcherPath: adminLib.getLauncherPath(),
     launcherUrl: adminLib.getLauncherUrl(),

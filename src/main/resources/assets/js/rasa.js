@@ -29,6 +29,18 @@ function notifyResponse(json) {
   responseListeners.forEach(listener => listener(json));
 }
 
+function results(params) {
+  const data = {};
+  if (params) {
+    data.sender = params.sender;
+    data.user = params.user;
+    data.startDate = params.start;
+    data.endDate = params.end;
+  }
+  // eslint-disable-next-line no-undef
+  return postAjax(`${appUrl}/rasa/results`, 'POST', data, notifyResponse);
+}
+
 function message(query) {
   // eslint-disable-next-line no-undef
   postAjax(`${appUrl}/rasa/parse`, 'POST', { query, sender }, notifyResponse);
@@ -66,6 +78,7 @@ module.exports = {
   message,
   action,
   restart,
+  results,
   actions,
   getSender,
   onResponse,

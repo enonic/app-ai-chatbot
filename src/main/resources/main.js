@@ -75,16 +75,6 @@ function renderPage(pageName) {
 }
 
 function sendToRasaServer(sender, action, body, method) {
-  log.info(
-    'RASA REQUEST : \nsender : ' +
-      sender +
-      '\n' +
-      method +
-      ' : ' +
-      action +
-      '\nbody : ' +
-      JSON.stringify(body)
-  );
   // eslint-disable-next-line vars-on-top
   var rasaResponse = httpClient.request({
     url: helper.getRasaUrl(sender) + action,
@@ -98,7 +88,6 @@ function sendToRasaServer(sender, action, body, method) {
     body: JSON.stringify(body),
     contentType: 'application/json'
   });
-  log.info('RASA RESPONSE : ' + JSON.stringify(rasaResponse));
   return rasaResponse;
 }
 
@@ -153,7 +142,6 @@ function getAllMessagesFromRasa(query, sender) {
     rasaResponse = doRasaContinue(sender, action);
     action = JSON.parse(rasaResponse.body).next_action;
   }
-  log.info('ALL MESSAGES FROM RASA: ' + JSON.stringify(messages));
 
   return {
     body: JSON.stringify({
@@ -172,9 +160,21 @@ function rasaContinue(req) {
   doRasaContinue(sender, action, events);
 }
 
-// eslint-disable-next-line no-unused-vars
-function rasaGetResults(sender) {
-  return sendToRasaServer(sender, 'tracker', {}, 'GET');
+function rasaResults(req) {
+  var data = JSON.parse(req.params.data);
+  var results = repo.getConversationResults({
+    userId: data.user,
+    conversationId: data.sender,
+    startDate: data.start,
+    endDate: data.end
+  });
+  return {
+    body: JSON.stringify({
+      results: results
+    }),
+    contentType: 'application/json',
+    status: 200
+  };
 }
 
 function rasaParse(req) {
@@ -207,6 +207,7 @@ router.post('/history', updateHistory);
 
 router.post('/rasa/parse', rasaParse);
 router.post('/rasa/continue', rasaContinue);
+router.post('/rasa/results', rasaResults);
 
 exports.all = function(req) {
   return router.dispatch(req);

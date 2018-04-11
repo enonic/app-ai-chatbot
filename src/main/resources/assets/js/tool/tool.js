@@ -1,4 +1,5 @@
 import * as Chart from '../../../../../../node_modules/chart.js/dist/Chart';
+import * as rasa from '../rasa';
 
 const randomScalingFactor = function() {
   return Math.round(Math.random() * 100);
@@ -13,6 +14,12 @@ const chartColors = {
   purple: 'rgb(153, 102, 255)',
   grey: 'rgb(201, 203, 207)'
 };
+
+rasa.onResponse(results => {
+  console.log(results);
+});
+
+rasa.results();
 
 // eslint-disable-next-line func-names
 window.createDoughnutChart = function(id, title) {
