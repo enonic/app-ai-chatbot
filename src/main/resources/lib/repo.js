@@ -143,6 +143,79 @@ function saveMessage(senderId, message) {
   doSaveMessage(senderId, message, user);
 }
 
+// eslint-disable-next-line
+function getConversationResults(params) { // params: {userId, conversationId, startDate, endDate}
+  var repoConn = connect();
+
+  var query = '';
+
+  if (params.userId) {
+    var userNode = getUserNode(repoConn, params.userId);
+
+    if (!userNode) {
+      return [];
+    }
+
+    query += '_parentPath = "' + userNode._path + '"';
+  }
+
+  if (params.conversationId) {
+    if (query.length > 0) {
+      query += ' and ';
+    }
+
+    query += 'conversationId = "' + params.conversationId + '"';
+  }
+
+  if (query.length === 0) {
+    query += '_parentPath like "' + LOGS_PATH + '/*"';
+  }
+
+  if (params.startDate) {
+    if (query.length > 0) {
+      query += ' and ';
+    }
+
+    query += '_timestamp >= "' + params.startDate + '"';
+  }
+
+  if (params.endDate) {
+    if (query.length > 0) {
+      query += ' and ';
+    }
+
+    query += '_timestamp <= "' + params.endDate + '"';
+  }
+
+  var queryResult = repoConn.query({
+    start: 0,
+    count: -1,
+    query: query
+  });
+
+  var conversations = [];
+  if (queryResult.count > 0) {
+    var keys = queryResult.hits.map(function(hit) {
+      return hit.id;
+    });
+    conversations = repoConn.get(keys);
+  }
+
+  if (!Array.isArray(conversations)) {
+    conversations = [conversations];
+  }
+
+  return conversations.length > 0
+    ? conversations
+        .map(function(conversation) {
+          return conversation.conversationResults;
+        })
+        .filter(function(result) {
+          return result != null;
+        })
+    : [];
+}
+
 function saveConversationResults(senderId, result) {
   var repoConn = connect();
 
@@ -159,11 +232,7 @@ function saveConversationResults(senderId, result) {
     return;
   }
 
-  var conversationNode = getConversationNode(
-    repoConn,
-    userNode,
-    "'" + senderId + "'"
-  );
+  var conversationNode = getConversationNode(repoConn, userNode, senderId);
 
   if (conversationNode) {
     repoConn.modify({
