@@ -12,9 +12,10 @@ var RASA_ACTIONS = {
   LISTEN: 'action_listen'
 };
 
+// eslint-disable-next-line no-unused-vars
 function doSuggest(tracker) {
   return {
-    text: tracker.sender_id + ', are you ok with that ?',
+    text: 'Are you ok with that ?',
     options: ['Yes', 'No']
   };
 }

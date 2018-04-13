@@ -215,6 +215,7 @@ function getConversationResults(params) {
           var r = JSON.parse(JSON.stringify(conversation.conversationResults));
           r.conversationId = conversation.conversationId;
           r.userId = conversation.userId;
+          r.created = conversation._timestamp;
           return r;
         })
         .filter(function(result) {

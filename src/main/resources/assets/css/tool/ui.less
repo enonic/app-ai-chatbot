@@ -1,9 +1,27 @@
+body {
+  font-size: 16px;
+}
+
 h1 {
   font-family: 'Roboto', "Helvetica Neue", Helvetica, sans-serif;
   margin-bottom: 1em;
   text-align: center;
-  font-size: 48px;
+  font-size: 3em;
   font-weight: 100;
+}
+
+dl {
+  text-align: center;
+  font-size: 1.25em;
+
+  dt {
+    display: inline-block;
+  }
+
+  dd {
+    display: inline-block;
+    margin: 0 30px 0 10px;
+  }
 }
 
 #charts {
@@ -34,6 +52,10 @@ h1 {
       & > div {
         float: left;
         width: 50%;
+
+        &:nth-child(2n+1) {
+          clear: left;
+        }
       }
     }
   }
@@ -52,11 +74,11 @@ h1 {
       float: left;
 
       &.hero {
-        width: 70%;
+        width: 75%;
       }
 
       &.side {
-        width: 30%;
+        width: 25%;
       }
     }
   }

@@ -1,9 +1,9 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable func-names */
+/* eslint-disable no-unused-vars */
+import * as moment from '../../../../../../node_modules/moment/moment';
 import * as Chart from '../../../../../../node_modules/chart.js/dist/Chart';
 import * as rasa from '../rasa';
-
-const randomScalingFactor = function() {
-  return Math.round(Math.random() * 100);
-};
 
 const chartColors = {
   red: 'rgb(255, 99, 132)',
@@ -15,26 +15,83 @@ const chartColors = {
   grey: 'rgb(201, 203, 207)'
 };
 
-rasa.onResponse(results => {
-  console.log(results);
-});
+function splitByField(data, field) {
+  const u = {};
+  data.forEach(d => {
+    const val = d[field];
+    const ud = u[val];
+    if (!ud) {
+      u[val] = [d];
+    } else {
+      ud.push(d);
+    }
+  });
+  return u;
+}
 
-rasa.results();
+function calcPrice(price) {
+  // eslint-disable-next-line no-nested-ternary
+  return price === 'lo' ? 1 : price === 'hi' ? 2 : 0;
+}
 
-// eslint-disable-next-line func-names
-window.createDoughnutChart = function(id, title) {
+function calcCuisine(cuisine) {
+  return cuisine ? cuisine.length : 0;
+}
+
+function calcLocation(location) {
+  return location ? location.length : 0;
+}
+
+function calcPeople(people) {
+  // eslint-disable-next-line radix
+  return parseInt(people) || 0;
+}
+
+function calcAverage(conversations) {
+  const len = conversations.length;
+  return conversations.reduce(
+    (prev, curr, index) => {
+      prev.price += calcPrice(curr.price);
+      prev.cuisine += calcCuisine(curr.cuisine);
+      prev.location += calcLocation(curr.location);
+      prev.people += calcPeople(curr.people);
+      if (index === len - 1) {
+        prev.price /= len;
+        prev.cuisine /= len;
+        prev.location /= len;
+        prev.people /= len;
+      }
+      return prev;
+    },
+    {
+      price: 0,
+      cuisine: 0,
+      location: 0,
+      people: 0
+    }
+  );
+}
+
+/*  DOUGHNUT  */
+
+function calcDoughnutData(data) {
+  return Object.values(data).map(v => v.length);
+}
+
+function calcDoughnutLabels(data) {
+  return Object.keys(data);
+}
+
+function createDoughnutChart(id, title, rawData, field) {
+  const splitData = splitByField(rawData, field);
+  const data = calcDoughnutData(splitData);
+  const labels = calcDoughnutLabels(splitData);
   const config = {
     type: 'doughnut',
     data: {
       datasets: [
         {
-          data: [
-            randomScalingFactor(),
-            randomScalingFactor(),
-            randomScalingFactor(),
-            randomScalingFactor(),
-            randomScalingFactor()
-          ],
+          data,
           backgroundColor: [
             chartColors.red,
             chartColors.orange,
@@ -45,7 +102,7 @@ window.createDoughnutChart = function(id, title) {
           label: 'Dataset 1'
         }
       ],
-      labels: ['Red', 'Orange', 'Yellow', 'Green', 'Blue']
+      labels
     },
     options: {
       responsive: true,
@@ -54,7 +111,9 @@ window.createDoughnutChart = function(id, title) {
       },
       title: {
         display: true,
-        text: title
+        text: title,
+        fontFamily: "Roboto, 'Helvetica Neue', sans-serif",
+        fontSize: 16
       },
       animation: {
         animateScale: true,
@@ -65,63 +124,78 @@ window.createDoughnutChart = function(id, title) {
 
   const ctx = document.getElementById(id).getContext('2d');
   return new Chart(ctx, config);
-};
+}
 
-// eslint-disable-next-line func-names
-window.createBarChart = function(id, title) {
-  const barChartData = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-    datasets: [
-      {
-        label: 'Dataset 1',
-        backgroundColor: chartColors.red,
-        data: [
-          randomScalingFactor(),
-          randomScalingFactor(),
-          randomScalingFactor(),
-          randomScalingFactor(),
-          randomScalingFactor(),
-          randomScalingFactor(),
-          randomScalingFactor()
-        ]
-      },
-      {
-        label: 'Dataset 2',
-        backgroundColor: chartColors.blue,
-        data: [
-          randomScalingFactor(),
-          randomScalingFactor(),
-          randomScalingFactor(),
-          randomScalingFactor(),
-          randomScalingFactor(),
-          randomScalingFactor(),
-          randomScalingFactor()
-        ]
-      },
-      {
-        label: 'Dataset 3',
-        backgroundColor: chartColors.green,
-        data: [
-          randomScalingFactor(),
-          randomScalingFactor(),
-          randomScalingFactor(),
-          randomScalingFactor(),
-          randomScalingFactor(),
-          randomScalingFactor(),
-          randomScalingFactor()
-        ]
-      }
-    ]
-  };
+/*  BAR   */
+
+function calcDateRange(date, range) {
+  let result;
+  const mom = moment(date);
+  switch (range) {
+    case 'D':
+      result = mom.format('ddd');
+      break;
+    case 'M':
+      result = mom.format('MMM');
+      break;
+    case 'W':
+    default:
+      result = `Week ${mom.week()}`;
+      break;
+  }
+  return result;
+}
+
+function splitByDate(data, range) {
+  const u = {};
+  data.forEach(d => {
+    const val = calcDateRange(d.created, range);
+    const ud = u[val];
+    if (!ud) {
+      u[val] = [d];
+    } else {
+      ud.push(d);
+    }
+  });
+  return u;
+}
+
+function createBarChart(id, title, rawData) {
+  const dataByDate = splitByDate(rawData, 'D');
+  const averagesByDate = {};
+  Object.keys(dataByDate).forEach((dateKey, index) => {
+    averagesByDate[dateKey] = calcAverage(dataByDate[dateKey]);
+  });
+
+  const datasets = Object.keys(Object.values(averagesByDate)[0]).reduce(
+    (prev, fieldKey, index) => {
+      const color = Object.values(chartColors)[
+        index % Object.keys(chartColors).length
+      ];
+      const data = Object.values(averagesByDate).map(av => av[fieldKey]);
+      prev.push({
+        label: fieldKey,
+        backgroundColor: color,
+        data
+      });
+      return prev;
+    },
+    []
+  );
 
   const ctx = document.getElementById(id).getContext('2d');
   return new Chart(ctx, {
     type: 'bar',
-    data: barChartData,
+    data: {
+      labels: calcDoughnutLabels(dataByDate),
+      datasets
+    },
     options: {
       title: {
         display: true,
-        text: title
+        text: title,
+        fontFamily: "Roboto, 'Helvetica Neue', sans-serif",
+        fontSize: 16
       },
       tooltips: {
         mode: 'index',
@@ -142,59 +216,38 @@ window.createBarChart = function(id, title) {
       }
     }
   });
-};
+}
 
-window.createRadarChart = function(id, title) {
+/*  RADAR   */
+
+function createRadarChart(id, title, dataByUser) {
+  const datasets = Object.keys(dataByUser).map((userId, index) => {
+    const conversationsByUser = dataByUser[userId];
+    const averageByUser = calcAverage(conversationsByUser);
+    const color = Object.values(chartColors)[
+      index % Object.keys(chartColors).length
+    ];
+    return {
+      label: userId,
+      backgroundColor: Chart.helpers
+        .color(color)
+        .alpha(0.2)
+        .rgbString(),
+      borderColor: color,
+      pointBackgroundColor: color,
+      data: [
+        averageByUser.people,
+        averageByUser.location,
+        averageByUser.cuisine,
+        averageByUser.price
+      ]
+    };
+  });
   const config = {
     type: 'radar',
     data: {
-      labels: [
-        ['Eating', 'Dinner'],
-        ['Drinking', 'Water'],
-        'Sleeping',
-        ['Designing', 'Graphics'],
-        'Coding',
-        'Cycling',
-        'Running'
-      ],
-      datasets: [
-        {
-          label: 'My First dataset',
-          backgroundColor: Chart.helpers
-            .color(chartColors.red)
-            .alpha(0.2)
-            .rgbString(),
-          borderColor: chartColors.red,
-          pointBackgroundColor: chartColors.red,
-          data: [
-            randomScalingFactor(),
-            randomScalingFactor(),
-            randomScalingFactor(),
-            randomScalingFactor(),
-            randomScalingFactor(),
-            randomScalingFactor(),
-            randomScalingFactor()
-          ]
-        },
-        {
-          label: 'My Second dataset',
-          backgroundColor: Chart.helpers
-            .color(chartColors.blue)
-            .alpha(0.2)
-            .rgbString(),
-          borderColor: chartColors.blue,
-          pointBackgroundColor: chartColors.blue,
-          data: [
-            randomScalingFactor(),
-            randomScalingFactor(),
-            randomScalingFactor(),
-            randomScalingFactor(),
-            randomScalingFactor(),
-            randomScalingFactor(),
-            randomScalingFactor()
-          ]
-        }
-      ]
+      labels: ['Order size', 'Location', 'Cuisine', 'Price'],
+      datasets
     },
     options: {
       legend: {
@@ -202,7 +255,9 @@ window.createRadarChart = function(id, title) {
       },
       title: {
         display: true,
-        text: title
+        text: title,
+        fontFamily: "Roboto, 'Helvetica Neue', sans-serif",
+        fontSize: 16
       },
       scale: {
         ticks: {
@@ -214,4 +269,25 @@ window.createRadarChart = function(id, title) {
 
   const ctx = document.getElementById(id).getContext('2d');
   return new Chart(ctx, config);
+}
+
+function drawCharts(data) {
+  const dataByUser = splitByField(data, 'userId');
+
+  createRadarChart('canvas-1', 'Per user', dataByUser);
+  createDoughnutChart('canvas-2', 'Cuisine', data, 'cuisine');
+  createDoughnutChart('canvas-3', 'Order size', data, 'people');
+  createBarChart('canvas-4', 'Histogram', data);
+
+  document.getElementById('conversations_n').innerHTML = data.length;
+  document.getElementById('users_n').innerHTML = Object.keys(dataByUser).length;
+}
+
+rasa.onResponse(response => {
+  console.log(response.results);
+  drawCharts(response.results);
+});
+
+window.onload = function() {
+  rasa.results();
 };
