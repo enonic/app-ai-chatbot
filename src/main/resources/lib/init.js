@@ -12,6 +12,8 @@ var createRepo = function() {
     id: REPO_NAME,
     rootPermissions: ROOT_PERMISSIONS
   });
+
+  repoLib.refresh('SEARCH');
   log.info('Repository created.');
 };
 
@@ -40,6 +42,8 @@ var createLogsNode = function() {
     _parentPath: '/',
     _permissions: ROOT_PERMISSIONS
   });
+
+  repoConn.refresh('SEARCH');
 };
 
 var doInitialize = function() {

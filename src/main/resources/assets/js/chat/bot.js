@@ -33,9 +33,16 @@ export default function Bot(options = {}) {
   const userTalk = say => talk(say, null, messageType.USER);
   this.userTalk = userTalk;
 
+  let greetingMessage;
   const botTalk = (say, reply, isNew) => {
     talk(say, reply, messageType.BOT);
-    updateHistory(getSender(), { text: say, isBot: true, isNew });
+
+    const senderId = getSender();
+    if (isNew) {
+      greetingMessage = { text: say, isBot: true };
+    } else {
+      updateHistory(senderId, { text: say, isBot: true });
+    }
   };
   this.botTalk = botTalk;
 
@@ -48,7 +55,12 @@ export default function Bot(options = {}) {
 
   const { sendCallback } = fullOptions;
   fullOptions.sendCallback = msg => {
-    sendCallback(msg);
+    if (greetingMessage) {
+      updateHistory(getSender(), greetingMessage);
+      greetingMessage = null;
+    }
+
+    sendCallback(msg, greetingMessage);
     selfTalk(msg);
   };
 

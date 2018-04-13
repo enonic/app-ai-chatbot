@@ -37,28 +37,39 @@ function convertMessage(message, user) {
 }
 
 function createUserNode(repoConn, userId) {
-  return repoConn.create({
+  var result = repoConn.create({
     _parentPath: LOGS_PATH,
     _permissions: ROOT_PERMISSIONS,
     userId: userId
   });
+
+  repoConn.refresh('SEARCH');
+
+  return result;
 }
 
 function createConversationNode(repoConn, userNode, senderId) {
-  return repoConn.create({
+  var result = repoConn.create({
     _parentPath: userNode._path,
     _permissions: ROOT_PERMISSIONS,
     conversationId: senderId,
     userId: userNode.userId
   });
+
+  repoConn.refresh('SEARCH');
+
+  return result;
 }
 
 function createMessageNode(repoConn, conversationNode, convertedMessage) {
-  return repoConn.create({
+  var result = repoConn.create({
     _parentPath: conversationNode._path,
     _permissions: ROOT_PERMISSIONS,
     message: convertedMessage
   });
+
+  repoConn.refresh('SEARCH');
+  return result;
 }
 
 function getUserNode(repoConn, userId) {
@@ -251,6 +262,8 @@ function saveConversationResults(senderId, result) {
         return node;
       }
     });
+
+    repoConn.refresh('SEARCH');
   }
 }
 
