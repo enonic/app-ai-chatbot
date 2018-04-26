@@ -47,5 +47,18 @@ npm run server
 ```
 After server is up and running login to Enonic XP and navigate to:
 ```
-http://localhost:8080/app/com.enonic.app.aibot
+http://localhost:8080/app/com.enonic.app.chatbot
+```
+
+== Deployment with docker
+To use docker for deployment, build and launch the container with the following commands:
+
+Build the container.
+```
+docker build -t enoniccloud/chatbot .
+```
+
+Start the docker container with the following command
+```
+docker run -d -p "7454:7454" enoniccloud/chatbot
 ```
