@@ -19,6 +19,12 @@ exports.getBaseUrl = function() {
   return this.endsWithSlash(appUrl) ? appUrl.slice(0, -1) : appUrl;
 };
 
+exports.getLoginUrl = function() {
+  return portalLib.loginUrl({
+    redirect: this.getAppUrl()
+  });
+};
+
 exports.endsWithSlash = function(url) {
   return url.slice(-1) === '/';
 };

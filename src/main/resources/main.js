@@ -6,72 +6,30 @@ var init = require('/lib/init');
 var repo = require('/lib/repo');
 var swController = require('/lib/pwa/sw-controller');
 var templates = require('/lib/templates');
+var authLib = require('/lib/xp/auth');
 
 var siteTitle = 'AI Bot';
 var RASA_ACTIONS = {
   LISTEN: 'action_listen'
 };
-
-// eslint-disable-next-line no-unused-vars
-function doSuggest(tracker) {
-  return {
-    text: 'Are you ok with that ?',
-    options: ['Yes', 'No']
-  };
-}
-
-function doSearchRestaurants(tracker) {
-  var slots = tracker.slots;
-  var query = '';
-  if (slots.price) {
-    query += slots.price === 'lo' ? 'Cheap ' : 'Expensive ';
-  }
-  if (slots.cuisine) {
-    query += slots.cuisine + ' ';
-  }
-  query += 'restaurant ';
-  if (slots.location) {
-    query += 'in ' + slots.location + ' ';
-  }
-  if (slots.people) {
-    query += 'for ' + slots.people;
-  }
-
-  repo.saveConversationResults(tracker.sender_id, slots);
-
-  return {
-    text:
-      '<a href="https://www.google.com/search?q=' +
-      query +
-      '">' +
-      query +
-      '</a>'
-  };
-}
-
-var XP_ACTIONS = {
-  action_suggest: doSuggest,
-  action_search_restaurants: doSearchRestaurants
-};
+var XP_ACTIONS = require('/lib/actions');
 
 function renderPage(pageName) {
-  return function() {
-    return {
-      body: mustacheLib.render(resolve('pages/' + pageName), {
+  return {
+    body: mustacheLib.render(resolve('pages/' + pageName), {
+      title: siteTitle,
+      version: app.version,
+      appUrl: helper.getAppUrl(),
+      baseUrl: helper.getBaseUrl(),
+      precacheUrl: helper.getBaseUrl() + '/precache',
+      themeColor: '#FFF',
+      serviceWorker: mustacheLib.render(resolve('/pages/sw.html'), {
         title: siteTitle,
-        version: app.version,
-        appUrl: helper.getAppUrl(),
         baseUrl: helper.getBaseUrl(),
         precacheUrl: helper.getBaseUrl() + '/precache',
-        themeColor: '#FFF',
-        serviceWorker: mustacheLib.render(resolve('/pages/sw.html'), {
-          title: siteTitle,
-          baseUrl: helper.getBaseUrl(),
-          precacheUrl: helper.getBaseUrl() + '/precache',
-          appUrl: helper.getAppUrl()
-        })
+        appUrl: helper.getAppUrl()
       })
-    };
+    })
   };
 }
 
@@ -199,9 +157,20 @@ function updateHistory(req) {
   repo.saveMessage(req.params.senderId, message);
 }
 
+// eslint-disable-next-line no-unused-vars
+function serveRoot(req) {
+  var user = authLib.getUser();
+  if (!user) {
+    return {
+      redirect: helper.getLoginUrl()
+    };
+  }
+  return renderPage('main.html');
+}
+
 init.initialize();
 
-router.get('/', renderPage('main.html'));
+router.get('/', serveRoot.bind(this));
 router.get('/sw.js', swController.get);
 router.get('/history', getHistory);
 router.post('/history', updateHistory);
