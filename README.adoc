@@ -55,10 +55,10 @@ To use docker for deployment, build and launch the container with the following 
 
 Build the container.
 ```
-docker build -t enoniccloud/chatbot .
+docker build -t chatbot .
 ```
 
 Start the docker container with the following command
 ```
-docker run -d -p "7454:7454" enoniccloud/chatbot
+docker run -d -p "7454:7454" chatbot
 ```
