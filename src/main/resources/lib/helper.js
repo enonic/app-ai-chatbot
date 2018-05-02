@@ -1,15 +1,30 @@
 var portalLib = require('/lib/xp/portal');
 
-exports.getAppUrl = function getAppUrl() {
-  return portalLib.url({ path: '/app/' + app.name });
-};
+var RASA_HOST = 'rasa.host';
+var RASA_PORT = 'rasa.port';
 
-exports.getRasaUrl = function getRasaUrl(conversationId) {
+function getDefaultRasaUrl() {
   var url = portalLib.url({ path: '/', type: 'absolute' });
   var firstIndex = url.indexOf(':');
   var lastIndex = url.lastIndexOf(':');
   if (firstIndex !== lastIndex && lastIndex >= 0) {
     url = url.substring(0, lastIndex) + ':7454/';
+  }
+  return url;
+}
+
+exports.getAppUrl = function getAppUrl() {
+  return portalLib.url({ path: '/app/' + app.name });
+};
+
+exports.getRasaUrl = function getRasaUrl(conversationId) {
+  var url;
+  var config = app.config;
+  if (config && config[RASA_HOST]) {
+    url =
+      config[RASA_HOST] + (config[RASA_PORT] ? ':' + config[RASA_PORT] : '');
+  } else {
+    url = getDefaultRasaUrl();
   }
   return url + 'conversations/' + conversationId + '/';
 };
