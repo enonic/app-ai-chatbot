@@ -21,8 +21,11 @@ exports.getRasaUrl = function getRasaUrl(conversationId) {
   var url;
   var config = app.config;
   if (config && config[RASA_HOST]) {
-    url =
-      config[RASA_HOST] + (config[RASA_PORT] ? ':' + config[RASA_PORT] : '');
+    var host = config[RASA_HOST];
+    if (!/^https?:\/\//i.test(host)) {
+      host = 'http://' + host;
+    }
+    url = host + (config[RASA_PORT] ? ':' + config[RASA_PORT] : '') + '/';
   } else {
     url = getDefaultRasaUrl();
   }
