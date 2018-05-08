@@ -16,28 +16,40 @@ function createElement(classNames, innerHTML, type = 'div') {
 }
 
 const getFeed = element => element.querySelector('.chat-message-feed');
+const getWrapper = () => document.querySelector('.chat-wrapper');
 const getUserInput = element => element.querySelector('.chat-input');
 const getTextArea = element => element.querySelector('.chat-input__input');
 const getSendButton = element => element.querySelector('.chat-input__send');
 
-function addStatusEventListeners(wrapper) {
+export function toggleOnlineStatus(online, wrapper) {
+  if (!wrapper) {
+    // eslint-disable-next-line no-param-reassign
+    wrapper = getWrapper();
+  }
   const textarea = getTextArea(wrapper);
   const sendButton = getSendButton(wrapper);
 
-  const toggleOnlineStatus = () => {
-    if (navigator.onLine) {
-      wrapper.classList.remove('offline');
-    } else {
-      wrapper.classList.add('offline');
-    }
-    textarea.disabled = !navigator.onLine;
-    sendButton.disabled = !navigator.onLine;
-  };
+  const isOnline = online !== false && navigator.onLine;
+  if (isOnline) {
+    wrapper.classList.remove('offline');
+  } else {
+    wrapper.classList.add('offline');
+  }
+  textarea.disabled = !isOnline;
+  sendButton.disabled = !isOnline;
+}
 
-  window.addEventListener('offline', toggleOnlineStatus);
-  window.addEventListener('online', toggleOnlineStatus);
+function addStatusEventListeners(wrapper) {
+  window.addEventListener(
+    'offline',
+    toggleOnlineStatus.bind(undefined, wrapper)
+  );
+  window.addEventListener(
+    'online',
+    toggleOnlineStatus.bind(undefined, wrapper)
+  );
 
-  toggleOnlineStatus();
+  toggleOnlineStatus(undefined, wrapper);
 }
 
 function addInputEventListeners(wrapper, sendCallback) {
@@ -117,7 +129,7 @@ export function renderBot(sendCallback) {
   wrapper.innerHTML = `
   <div class="chat-status-bar">
     <span class="chat-status-bar__status chat-online-text">Online</span>
-    <span class="chat-status-bar__status chat-offline-text">Waiting for network…</span>
+    <span class="chat-status-bar__status chat-offline-text">Server unavailable…</span>
   </div>
   <div class="chat-placeholder">
     <div class="chat-message-feed"></div>

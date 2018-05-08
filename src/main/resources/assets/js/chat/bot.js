@@ -2,7 +2,12 @@ import { messageType, options as defaultOptions } from './config';
 // eslint-disable-next-line no-unused-vars
 import { updateHistory } from './../history';
 import validate from './validator';
-import { renderBot, renderMessage, renderSeparator } from './renderer';
+import {
+  renderBot,
+  renderMessage,
+  renderSeparator,
+  toggleOnlineStatus
+} from './renderer';
 import { getSender } from './../rasa';
 
 function validateAndRender(options) {
@@ -32,6 +37,8 @@ export default function Bot(options = {}) {
 
   const userTalk = say => talk(say, null, messageType.USER);
   this.userTalk = userTalk;
+
+  this.toggleOnline = toggleOnlineStatus;
 
   let greetingMessage;
   const botTalk = (say, reply, isNew) => {

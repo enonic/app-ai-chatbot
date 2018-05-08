@@ -14,6 +14,10 @@ const history = require('../js/history');
   });
 
   rasa.onResponse(response => {
+    if (response.redirect) {
+      // eslint-disable-next-line no-restricted-globals
+      location.href = response.loginUrl;
+    }
     const msgs = response.messages;
     let uniqueMessages;
     if (msgs && msgs.length > 0) {
@@ -34,6 +38,10 @@ const history = require('../js/history');
       const message = uniqueMessages.splice(0, 1)[0];
       bot.botTalk(message.text, message.buttons);
     }
+  });
+
+  rasa.onFailure(() => {
+    bot.toggleOnline(false);
   });
 
   const onHistoryLoaded = chatHistory => {
@@ -59,4 +67,7 @@ const history = require('../js/history');
     bot.botTalk('Hi there!', null, true);
   };
   history.loadHistory(onHistoryLoaded);
+
+  // ask version to turn off chat if rasa server is unavailable
+  rasa.version();
 })();

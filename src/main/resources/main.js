@@ -34,8 +34,7 @@ function renderPage(pageName) {
 }
 
 function sendToRasaServer(sender, action, body, method) {
-  // eslint-disable-next-line vars-on-top
-  var rasaResponse = httpClient.request({
+  return httpClient.request({
     url: helper.getRasaUrl(sender) + action,
     method: method || 'POST',
     headers: {
@@ -44,10 +43,9 @@ function sendToRasaServer(sender, action, body, method) {
     },
     connectionTimeout: 20000,
     readTimeout: 5000,
-    body: JSON.stringify(body),
+    body: body ? JSON.stringify(body) : undefined,
     contentType: 'application/json'
   });
-  return rasaResponse;
 }
 
 function getCustomActionHandler(action) {
@@ -136,7 +134,22 @@ function rasaResults(req) {
   };
 }
 
+function anonymousGuard() {
+  var user = authLib.getUser();
+  if (!user) {
+    return {
+      body: JSON.stringify({ redirect: true, loginUrl: helper.getLoginUrl() }),
+      contentType: 'application/json',
+      status: 200
+    };
+  }
+}
+
 function rasaParse(req) {
+  var guard = anonymousGuard();
+  if (guard) {
+    return guard;
+  }
   var data = JSON.parse(req.params.data);
   var query = data.query;
   var sender = data.sender;
@@ -168,6 +181,20 @@ function serveRoot(req) {
   return renderPage('main.html');
 }
 
+// eslint-disable-next-line no-unused-vars
+function rasaVersion(req) {
+  var versionResponse = sendToRasaServer(null, 'version', null, 'GET');
+  var versionBody = JSON.parse(versionResponse.body);
+  return {
+    body: JSON.stringify({
+      alive: versionResponse.status === 200,
+      version: versionBody.version
+    }),
+    contentType: 'application/json',
+    status: 200
+  };
+}
+
 init.initialize();
 
 router.get('/', serveRoot.bind(this));
@@ -176,6 +203,7 @@ router.get('/history', getHistory);
 router.post('/history', updateHistory);
 
 router.post('/rasa/parse', rasaParse);
+router.post('/rasa/version', rasaVersion);
 router.post('/rasa/continue', rasaContinue);
 router.post('/rasa/results', rasaResults);
 

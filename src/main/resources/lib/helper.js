@@ -29,7 +29,7 @@ exports.getRasaUrl = function getRasaUrl(conversationId) {
   } else {
     url = getDefaultRasaUrl();
   }
-  return url + 'conversations/' + conversationId + '/';
+  return url + (conversationId ? 'conversations/' + conversationId + '/' : '');
 };
 
 exports.getBaseUrl = function() {

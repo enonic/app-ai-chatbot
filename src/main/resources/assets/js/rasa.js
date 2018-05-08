@@ -1,4 +1,5 @@
 let responseListeners = [];
+let failureListeners = [];
 const sender = Date.now();
 
 const actions = {
@@ -7,14 +8,18 @@ const actions = {
   ON_IT: 'utter_on_it'
 };
 
-function postAjax(url, method, data, success) {
+function postAjax(url, method, data, success, failure) {
   const params = `data=${JSON.stringify(data)}`;
 
   const xhr = new XMLHttpRequest();
   xhr.open(method, url);
   xhr.onreadystatechange = () => {
-    if (xhr.readyState > 3 && xhr.status === 200) {
-      success(JSON.parse(xhr.responseText));
+    if (xhr.readyState > 3) {
+      if (success && xhr.status === 200) {
+        success(JSON.parse(xhr.responseText));
+      } else if (failure) {
+        failure(JSON.parse(xhr.responseText), xhr.status);
+      }
     }
   };
   xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
@@ -29,6 +34,11 @@ function notifyResponse(json) {
   responseListeners.forEach(listener => listener(json));
 }
 
+function notifyFailure(json) {
+  console.log('RASA FAILURE', json);
+  failureListeners.forEach(listener => listener(json));
+}
+
 function results(params) {
   const data = {};
   if (params) {
@@ -37,13 +47,36 @@ function results(params) {
     data.startDate = params.start;
     data.endDate = params.end;
   }
-  // eslint-disable-next-line no-undef
-  return postAjax(`${appUrl}/rasa/results`, 'POST', data, notifyResponse);
+  return postAjax(
+    // eslint-disable-next-line no-undef
+    `${appUrl}/rasa/results`,
+    'POST',
+    data,
+    notifyResponse,
+    notifyFailure
+  );
 }
 
 function message(query) {
-  // eslint-disable-next-line no-undef
-  postAjax(`${appUrl}/rasa/parse`, 'POST', { query, sender }, notifyResponse);
+  postAjax(
+    // eslint-disable-next-line no-undef
+    `${appUrl}/rasa/parse`,
+    'POST',
+    { query, sender },
+    notifyResponse,
+    notifyFailure
+  );
+}
+
+function version() {
+  postAjax(
+    // eslint-disable-next-line no-undef
+    `${appUrl}/rasa/version`,
+    'POST',
+    { sender },
+    notifyResponse,
+    notifyFailure
+  );
 }
 
 function action(a, events) {
@@ -70,6 +103,14 @@ function unResponse(callback) {
   responseListeners = responseListeners.filter(current => current !== callback);
 }
 
+function onFailure(callback) {
+  failureListeners.push(callback);
+}
+
+function unFailure(callback) {
+  failureListeners = failureListeners.filter(current => current !== callback);
+}
+
 function getSender() {
   return sender;
 }
@@ -77,10 +118,13 @@ function getSender() {
 module.exports = {
   message,
   action,
+  version,
   restart,
   results,
   actions,
   getSender,
   onResponse,
-  unResponse
+  unResponse,
+  onFailure,
+  unFailure
 };
