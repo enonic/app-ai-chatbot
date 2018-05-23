@@ -143,10 +143,16 @@ body {
   right: 0;
   box-sizing: border-box;
   height: 100%;
-  padding: 56px 12px 53px 53px;
+  padding: 56px 12px 0 53px;
   border-bottom: 10px solid transparent;
   overflow-x: hidden;
   overflow-y: scroll;
+
+  &::after {
+    content: "";
+    height: 53px;
+    display: block;
+  }
 }
 
 .chat-message-feed__message {
@@ -303,7 +309,7 @@ body {
   .chat-message-feed {
     left: -17px;
     right: -17px;
-    padding: 56px 43px 54px 79px;
+    padding: 56px 43px 0 79px;
     border-bottom: 10px solid transparent;
   }
 
