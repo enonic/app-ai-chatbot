@@ -238,25 +238,19 @@ body {
 
   .chat-message-feed__message-text {
     padding: 6px 12px;
-    border-radius: 5px;
     background-color: #fefefe;
     transform-origin: bottom left;
     cursor: default;
-  }
+    border-radius: 5px 5px 5px 0;
 
-  &:not(.chat-message-feed__message--reply) {
-    .chat-message-feed__message-text {
-      border-radius: 5px 5px 5px 0;
-
-      &::after {
-        content: '';
-        display: block;
-        position: absolute;
-        bottom: 0;
-        left: -6px;
-        border: 6px solid transparent;
-        border-bottom: 8px solid #fefefe;
-      }
+    &::after {
+      content: '';
+      display: block;
+      position: absolute;
+      bottom: 0;
+      left: -6px;
+      border: 6px solid transparent;
+      border-bottom: 8px solid #fefefe;
     }
   }
 }

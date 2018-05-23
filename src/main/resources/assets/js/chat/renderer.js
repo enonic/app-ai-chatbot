@@ -158,26 +158,33 @@ export function renderMessage(bot, say, reply, type) {
   const hasReply = !!reply && reply.length > 0;
   const scrolledTillEnd =
     feed.offsetHeight + feed.scrollTop >= feed.scrollHeight;
-  const mapReply = options =>
-    options.map(
-      option => `<div class="chat-message-feed__message-option">${option}</div>`
-    );
-  const options = hasReply
-    ? `
-    <div class="chat-message-feed__message-options">
-      ${mapReply(reply).join('')}
-    </div>
-  `
-    : '';
-  const classNames = `chat-message-feed__message chat-message-feed__message--${type} ${
-    hasReply ? 'chat-message-feed__message--reply' : ''
-  }`;
+
+  const classNames = `chat-message-feed__message chat-message-feed__message--${type}`;
   const text =
     say && say.length > 0
       ? `<div class="chat-message-feed__message-text">${say}</div>`
       : '';
-  const message = createElement(classNames, text + options);
+  const message = createElement(classNames, text);
   feed.appendChild(message);
+
+  if (hasReply) {
+    const mapReply = options =>
+      options.map(
+        option =>
+          `<div class="chat-message-feed__message-option">${option}</div>`
+      );
+    const options = hasReply
+      ? `<div class="chat-message-feed__message-options">${mapReply(reply).join(
+          ''
+        )}</div>`
+      : '';
+    const replyClassNames = `chat-message-feed__message chat-message-feed__message--${
+      messageType.SELF
+    }`;
+    const replyMessage = createElement(replyClassNames, options);
+    feed.appendChild(replyMessage);
+  }
+
   if (scrolledTillEnd || type === messageType.SELF) {
     feed.scrollTop = feed.scrollHeight;
   }
