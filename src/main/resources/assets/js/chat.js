@@ -14,28 +14,20 @@ const history = require('../js/history');
   });
 
   rasa.onResponse(response => {
+    if (response.action === 'tracker') {
+      console.log('Tracker', response);
+    }
     if (response.redirect) {
       // eslint-disable-next-line no-restricted-globals
       location.href = response.loginUrl;
     }
     const msgs = response.messages;
-    let uniqueMessages;
-    if (msgs && msgs.length > 0) {
-      // filter duplicates returned by RASA
-      const uniques = {};
-      for (const m in msgs) {
-        if (msgs.hasOwnProperty(m)) {
-          const msg = msgs[m];
-          if (!uniques[msg.text]) {
-            uniques[msg.text] = msg;
-          }
-        }
+    while (msgs && msgs.length > 0) {
+      const message = msgs.splice(0, 1)[0];
+      if (message.restarted) {
+        bot.separator();
+        rasa.tracker();
       }
-      uniqueMessages = Object.values(uniques);
-    }
-
-    while (uniqueMessages && uniqueMessages.length > 0) {
-      const message = uniqueMessages.splice(0, 1)[0];
       bot.botTalk(message.text, message.buttons);
     }
   });

@@ -19,5 +19,6 @@ module.exports = {
     text: ['In which price range?'],
     options: ['Cheap', 'Expensive']
   },
-  utter_on_it: { text: ["I'm on it"] }
+  utter_on_it: { text: ["I'm on it"] },
+  action_restart: { text: ['Hello again!'] }
 };

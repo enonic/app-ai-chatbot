@@ -3,9 +3,9 @@
     "action_listen": {
       "slots": [
         "location",
-        "people",
         "price",
-        "cuisine"
+        "cuisine",
+        "people"
       ]
     }
   },

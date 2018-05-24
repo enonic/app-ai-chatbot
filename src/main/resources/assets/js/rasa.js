@@ -79,6 +79,17 @@ function version() {
   );
 }
 
+function tracker() {
+  postAjax(
+    // eslint-disable-next-line no-undef
+    `${appUrl}/rasa/tracker`,
+    'POST',
+    { sender },
+    notifyResponse,
+    notifyFailure
+  );
+}
+
 function action(a, events) {
   const data = {};
   if (a) {
@@ -120,6 +131,7 @@ module.exports = {
   action,
   version,
   restart,
+  tracker,
   results,
   actions,
   getSender,
