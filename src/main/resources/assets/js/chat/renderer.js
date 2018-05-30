@@ -42,11 +42,11 @@ export function toggleOnlineStatus(online, wrapper) {
 function addStatusEventListeners(wrapper) {
   window.addEventListener(
     'offline',
-    toggleOnlineStatus.bind(undefined, wrapper)
+    toggleOnlineStatus.bind(toggleOnlineStatus, undefined, wrapper)
   );
   window.addEventListener(
     'online',
-    toggleOnlineStatus.bind(undefined, wrapper)
+    toggleOnlineStatus.bind(toggleOnlineStatus, undefined, wrapper)
   );
 
   toggleOnlineStatus(undefined, wrapper);
