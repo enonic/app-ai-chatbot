@@ -66,11 +66,12 @@ def train_stories(domain_file="domain_remote.yml",
                   model_path="models/stories",
                   training_data_file="data/stories.md"):
     agent = Agent(domain_file,
-                  policies=[MemoizationPolicy(), RestaurantPolicy()])
+                  policies=[MemoizationPolicy(max_history=3),
+                            RestaurantPolicy()])
 
+    training_data = agent.load_data(training_data_file)
     agent.train(
-        training_data_file,
-        max_history=3,
+        training_data,
         epochs=400,
         batch_size=100,
         validation_split=0.2
@@ -81,14 +82,14 @@ def train_stories(domain_file="domain_remote.yml",
 
 
 def train_nlu():
-    from rasa_nlu.converters import load_data
-    from rasa_nlu.config import RasaNLUConfig
+    from rasa_nlu.training_data import load_data
     from rasa_nlu.model import Trainer
+    from rasa_nlu import config
 
     training_data = load_data('data/nlu.json')
-    trainer = Trainer(RasaNLUConfig("nlu_model_config.json"))
+    trainer = Trainer(config.load("nlu_model_config.yml"))
     trainer.train(training_data)
-    model_directory = trainer.persist('models/nlu/', fixed_model_name="current")
+    model_directory = trainer.persist('models/nlu', fixed_model_name="current")  # Returns the directory the model is stored in
 
     return model_directory
 
@@ -147,13 +148,19 @@ if __name__ == '__main__':
         'task',
         choices=["train-nlu", "train-stories", "server", "console"],
         help="what the bot should do - e.g. run or train?")
-    task = parser.parse_args().task
+
+    parser.add_argument("-r", "--remote", dest="remote", default=False,
+                        help="write report to FILE", metavar="FILE")
+
+    args = parser.parse_args()
+    task = args.task
+    remote = args.remote
 
     # decide what to do based on first parameter of the script
     if task == "train-nlu":
         train_nlu()
     elif task == "train-stories":
-        train_stories()
+        train_stories("domain_remote.yml" if args.remote else "domain.yml")
     elif task == "server":
         server()
     elif task == 'console':

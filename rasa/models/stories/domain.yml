@@ -1,4 +1,4 @@
-action_factory: remote
+action_factory: null
 action_names:
 - utter_greet
 - utter_goodbye
@@ -29,8 +29,8 @@ actions:
 - utter_ask_numpeople
 - utter_ask_price
 - utter_on_it
-- action_search_restaurants
-- action_suggest
+- bot.ActionSearchRestaurants
+- bot.ActionSuggest
 config:
   store_entities_as_slots: true
 entities:
@@ -65,5 +65,40 @@ slots:
   price:
     initial_value: null
     type: rasa_core.slots.TextSlot
-templates: {}
+templates:
+  utter_ack_dosearch:
+  - text: ok let me see what I can find
+  utter_ack_findalternatives:
+  - text: ok let me see what else there is
+  utter_ack_makereservation:
+  - buttons:
+    - payload: thank you
+      title: thank you
+    text: ok making a reservation
+  utter_ask_cuisine:
+  - text: what kind of cuisine would you like?
+  utter_ask_howcanhelp:
+  - text: how can I help you?
+  utter_ask_location:
+  - text: where?
+  utter_ask_moreupdates:
+  - text: if you'd like to modify anything else, please tell me what
+  utter_ask_numpeople:
+  - text: for how many people?
+  utter_ask_price:
+  - buttons:
+    - payload: cheap
+      title: cheap
+    - payload: expensive
+      title: expensive
+    text: in which price range?
+  utter_default:
+  - text: default message
+  utter_goodbye:
+  - text: goodbye :(
+  - text: Bye-bye
+  utter_greet:
+  - text: hey there!
+  utter_on_it:
+  - text: I'm on it
 topics: []

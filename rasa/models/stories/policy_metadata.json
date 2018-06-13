@@ -4,13 +4,19 @@
       "slots": [
         "location",
         "price",
-        "cuisine",
-        "people"
+        "people",
+        "cuisine"
       ]
+    },
+    "action_restart": {
+      "slots": []
     }
   },
-  "rasa_core": "0.8.3",
-  "max_history": 3,
+  "rasa_core": "0.9.3",
+  "max_histories": [
+    3,
+    5
+  ],
   "ensemble_name": "rasa_core.policies.ensemble.SimplePolicyEnsemble",
   "policy_names": [
     "rasa_core.policies.memoization.MemoizationPolicy",
