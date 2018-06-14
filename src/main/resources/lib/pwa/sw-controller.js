@@ -2,7 +2,7 @@ var mustache = require('/lib/xp/mustache');
 var view = resolve('sw-template.js');
 var helper = require('/lib/helper');
 
-exports.get = function() {
+exports.get = function () {
   var appUrl = helper.getAppUrl();
   var baseUrl = helper.getBaseUrl();
   var postfix = '?source=web_app_manifest';

@@ -115,7 +115,7 @@ function getMessageNodes(repoConn, userNode) {
   });
 
   if (queryResult.count > 0) {
-    var keys = queryResult.hits.map(function(hit) {
+    var keys = queryResult.hits.map(function (hit) {
       return hit.id;
     });
     return repoConn.get(keys);
@@ -207,7 +207,7 @@ function getConversationResults(params) {
 
   var conversations = [];
   if (queryResult.count > 0) {
-    var keys = queryResult.hits.map(function(hit) {
+    var keys = queryResult.hits.map(function (hit) {
       return hit.id;
     });
     conversations = repoConn.get(keys);
@@ -219,19 +219,19 @@ function getConversationResults(params) {
 
   return conversations.length > 0
     ? conversations
-        .map(function(conversation) {
-          if (!conversation.conversationResults) {
-            return null;
-          }
-          var r = JSON.parse(JSON.stringify(conversation.conversationResults));
-          r.conversationId = conversation.conversationId;
-          r.userId = conversation.userId;
-          r.created = conversation._timestamp;
-          return r;
-        })
-        .filter(function(result) {
-          return result !== null;
-        })
+      .map(function (conversation) {
+        if (!conversation.conversationResults) {
+          return null;
+        }
+        var r = JSON.parse(JSON.stringify(conversation.conversationResults));
+        r.conversationId = conversation.conversationId;
+        r.userId = conversation.userId;
+        r.created = conversation._timestamp;
+        return r;
+      })
+      .filter(function (result) {
+        return result !== null;
+      })
     : [];
 }
 
@@ -256,7 +256,7 @@ function saveConversationResults(senderId, result) {
   if (conversationNode) {
     repoConn.modify({
       key: conversationNode._id,
-      editor: function(node) {
+      editor: function (node) {
         // eslint-disable-next-line no-param-reassign
         node.conversationResults = result;
         return node;
@@ -280,7 +280,7 @@ function doLoadHistory(user) {
 
   if (messageNodes) {
     if (Array.isArray(messageNodes)) {
-      var logs = messageNodes.map(function(messageNode) {
+      var logs = messageNodes.map(function (messageNode) {
         return messageNode.message;
       });
       return logs;

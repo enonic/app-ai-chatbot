@@ -10,7 +10,7 @@ export default function validate(parent) {
     localStorage.setItem(historyCacheKey, historyCacheKey);
     localStorage.removeItem(historyCacheKey);
   } catch (error) {
-    const msg = `Your server does not allow storing data locally. Most likely it's because you've opened this page from your hard-drive. For testing you can disable your browser's security or start a localhost environment.`;
+    const msg = 'Your server does not allow storing data locally. Most likely it\'s because you\'ve opened this page from your hard-drive. For testing you can disable your browser\'s security or start a localhost environment.';
     console.error(msg);
   }
 }

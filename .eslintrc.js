@@ -1,10 +1,6 @@
 module.exports = {
   'extends': [
-    'airbnb-base/legacy',
-    'prettier'
-  ],
-  'plugins': [
-    'prettier',
+    'airbnb-base/legacy'
   ],
   'rules': {
     'spaced-comment': [ 2, 'always', { 'exceptions': [ '-', '+' ] } ],
@@ -23,11 +19,6 @@ module.exports = {
         'functions': 'ignore',
     }],
     'func-names': ['off'],
-    'prettier/prettier': ['error', {
-      'singleQuote': true,
-      'printWidth': 80,
-      'tabWidth': 2
-    }],
     // 'quotes': ['error', 'single'],
     // no support in 'babel-eslint'; should be 'error'
     'no-await-in-loop': [ 'off' ],

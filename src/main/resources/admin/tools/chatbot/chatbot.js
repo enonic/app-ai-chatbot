@@ -5,7 +5,7 @@ var helper = require('/lib/helper');
 var siteTitle = 'Chat bot admin';
 
 // eslint-disable-next-line no-unused-vars
-exports.get = function(req) {
+exports.get = function (req) {
   var view = resolve('chatbot.html');
   var precacheUrl = helper.getBaseUrl() + '/precache';
 

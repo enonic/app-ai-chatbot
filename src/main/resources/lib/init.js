@@ -6,7 +6,7 @@ var REPO_NAME = repo.REPO_NAME;
 var LOGS_PATH = repo.LOGS_PATH;
 var ROOT_PERMISSIONS = repo.ROOT_PERMISSIONS;
 
-var createRepo = function() {
+var createRepo = function () {
   log.info('Creating repository [' + REPO_NAME + ']...');
   repoLib.create({
     id: REPO_NAME,
@@ -17,7 +17,7 @@ var createRepo = function() {
   log.info('Repository created.');
 };
 
-var nodeWithPathExists = function(repoConnection, path) {
+var nodeWithPathExists = function (repoConnection, path) {
   var result = repoConnection.query({
     start: 0,
     count: 0,
@@ -26,7 +26,7 @@ var nodeWithPathExists = function(repoConnection, path) {
   return result.total > 0;
 };
 
-var createLogsNode = function() {
+var createLogsNode = function () {
   var repoConn = repo.connect();
 
   var logsExist = nodeWithPathExists(repoConn, LOGS_PATH);
@@ -46,7 +46,7 @@ var createLogsNode = function() {
   repoConn.refresh('SEARCH');
 };
 
-var doInitialize = function() {
+var doInitialize = function () {
   var result = repoLib.get(REPO_NAME);
 
   if (result) {
@@ -58,7 +58,7 @@ var doInitialize = function() {
   createLogsNode();
 };
 
-exports.initialize = function() {
+exports.initialize = function () {
   log.info('Initializing repository...');
 
   contextLib.run(

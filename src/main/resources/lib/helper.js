@@ -32,17 +32,17 @@ exports.getRasaUrl = function getRasaUrl(conversationId) {
   return url + (conversationId ? 'conversations/' + conversationId + '/' : '');
 };
 
-exports.getBaseUrl = function() {
+exports.getBaseUrl = function () {
   var appUrl = this.getAppUrl();
   return this.endsWithSlash(appUrl) ? appUrl.slice(0, -1) : appUrl;
 };
 
-exports.getLoginUrl = function() {
+exports.getLoginUrl = function () {
   return portalLib.loginUrl({
     redirect: this.getAppUrl()
   });
 };
 
-exports.endsWithSlash = function(url) {
+exports.endsWithSlash = function (url) {
   return url.slice(-1) === '/';
 };

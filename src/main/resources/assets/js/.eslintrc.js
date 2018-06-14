@@ -1,10 +1,6 @@
 module.exports = {
   'extends': [
-    'airbnb',
-    'prettier'
-  ],
-  'plugins': [
-    'prettier',
+    'airbnb'
   ],
   'rules': {
     'spaced-comment': [ 2, 'always', { 'exceptions': [ '-', '+' ] } ],
@@ -22,11 +18,6 @@ module.exports = {
         'functions': 'ignore',
     }],
     'import/no-extraneous-dependencies': [ 'off', { 'devDependencies': [ 'util/', '**/*.test.js', '**/*.spec.js' ] } ],
-    'prettier/prettier': ['error', {
-      'singleQuote': true,
-      'printWidth': 80,
-      'tabWidth': 2
-    }],
     // 'quotes': ['error', 'single'],
     // no support in 'babel-eslint'; should be 'error'
     'no-await-in-loop': [ 'off' ],

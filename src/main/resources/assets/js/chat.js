@@ -7,13 +7,13 @@ const history = require('../js/history');
 (function main() {
   const bot = new Bot({
     parent: document.body,
-    sendCallback: text => {
+    sendCallback: (text) => {
       rasa.message(text);
       history.updateHistory(rasa.getSender(), { text, isBot: false });
     }
   });
 
-  rasa.onResponse(response => {
+  rasa.onResponse((response) => {
     if (response.action === 'tracker') {
       console.log('Tracker', response);
     }
@@ -36,12 +36,12 @@ const history = require('../js/history');
     bot.toggleOnline(false);
   });
 
-  const onHistoryLoaded = chatHistory => {
+  const onHistoryLoaded = (chatHistory) => {
     console.log('chat history:', chatHistory);
     if (chatHistory) {
-      chatHistory.forEach(session => {
+      chatHistory.forEach((session) => {
         if (Array.isArray(session.messages)) {
-          session.messages.forEach(message => {
+          session.messages.forEach((message) => {
             if (message.author === 'bot') {
               bot.botTalkNoHistory(message.text);
             } else {
@@ -62,4 +62,4 @@ const history = require('../js/history');
 
   // ask version to turn off chat if rasa server is unavailable
   rasa.version();
-})();
+}());

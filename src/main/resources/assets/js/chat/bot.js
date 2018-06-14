@@ -2,12 +2,7 @@ import { messageType, options as defaultOptions } from './config';
 // eslint-disable-next-line no-unused-vars
 import { updateHistory } from './../history';
 import validate from './validator';
-import {
-  renderBot,
-  renderMessage,
-  renderSeparator,
-  toggleOnlineStatus
-} from './renderer';
+import { renderBot, renderMessage, renderSeparator, toggleOnlineStatus } from './renderer';
 import { getSender } from './../rasa';
 
 function validateAndRender(options) {
@@ -61,7 +56,7 @@ export default function Bot(options = {}) {
   this.botTalkNoHistory = botTalkNoHistory;
 
   const { sendCallback } = fullOptions;
-  fullOptions.sendCallback = msg => {
+  fullOptions.sendCallback = (msg) => {
     if (greetingMessage) {
       updateHistory(getSender(), greetingMessage);
       greetingMessage = null;

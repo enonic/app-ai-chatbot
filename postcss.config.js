@@ -9,9 +9,9 @@ module.exports = {
     ...(isDev
       ? {}
       : {
-          'css-mqpacker': {},
-          'postcss-discard-comments': {},
-          cssnano: { discardUnused: true }
-        })
+        'css-mqpacker': {},
+        'postcss-discard-comments': {},
+        cssnano: {discardUnused: true}
+      })
   }
 };

@@ -17,7 +17,7 @@ const chartColors = {
 
 function splitByField(data, field) {
   const u = {};
-  data.forEach(d => {
+  data.forEach((d) => {
     const val = d[field];
     const ud = u[val];
     if (!ud) {
@@ -148,7 +148,7 @@ function calcDateRange(date, range) {
 
 function splitByDate(data, range) {
   const u = {};
-  data.forEach(d => {
+  data.forEach((d) => {
     const val = calcDateRange(d.created, range);
     const ud = u[val];
     if (!ud) {
@@ -283,11 +283,11 @@ function drawCharts(data) {
   document.getElementById('users_n').innerHTML = Object.keys(dataByUser).length;
 }
 
-rasa.onResponse(response => {
+rasa.onResponse((response) => {
   console.log(response.results);
   drawCharts(response.results);
 });
 
-window.onload = function() {
+window.onload = function () {
   rasa.results();
 };

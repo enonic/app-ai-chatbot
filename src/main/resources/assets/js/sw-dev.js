@@ -1,6 +1,4 @@
-importScripts(
-  'https://unpkg.com/workbox-sw@2.0.1/build/importScripts/workbox-sw.prod.v2.0.1.js'
-);
+importScripts('https://unpkg.com/workbox-sw@2.0.1/build/importScripts/workbox-sw.prod.v2.0.1.js');
 
 // eslint-disable-next-line no-restricted-globals
 const workboxSW = new self.WorkboxSW({

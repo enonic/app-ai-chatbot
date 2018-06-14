@@ -4,7 +4,7 @@ import { messageType } from './config';
 
 function createElement(classNames, innerHTML, type = 'div') {
   const div = document.createElement(type);
-  classNames.split(' ').forEach(className => {
+  classNames.split(' ').forEach((className) => {
     if (className) {
       div.classList.add(className);
     }
@@ -59,7 +59,7 @@ function addInputEventListeners(wrapper, sendCallback) {
   const feed = getFeed(wrapper);
 
   let wasEmpty = true;
-  const toggleEmptyClass = throttle(event => {
+  const toggleEmptyClass = throttle((event) => {
     const isEmpty = !event.target.value;
     if (isEmpty !== wasEmpty) {
       wasEmpty = isEmpty;
@@ -75,9 +75,7 @@ function addInputEventListeners(wrapper, sendCallback) {
     const text = textarea.value;
     if (text) {
       const lastMessage = feed.lastElementChild;
-      const hasReply = lastMessage.classList.contains(
-        'chat-message-feed__message--reply'
-      );
+      const hasReply = lastMessage.classList.contains('chat-message-feed__message--reply');
       if (hasReply) {
         lastMessage.remove();
         lastMessage.classList.remove('chat-message-feed__message--reply');
@@ -88,7 +86,7 @@ function addInputEventListeners(wrapper, sendCallback) {
     }
   };
 
-  const sendOnEnter = event => {
+  const sendOnEnter = (event) => {
     const isEnter = event.keyCode === 13;
     const isPC = event.key === event.code;
     if (isEnter && isPC) {
@@ -98,7 +96,7 @@ function addInputEventListeners(wrapper, sendCallback) {
     }
   };
 
-  textarea.addEventListener('keydown', event => {
+  textarea.addEventListener('keydown', (event) => {
     sendOnEnter(event);
     toggleEmptyClass(event);
   });
@@ -109,11 +107,9 @@ function addInputEventListeners(wrapper, sendCallback) {
 
 function addFeedEventListeners(bot, sendCallback) {
   const feed = getFeed(bot);
-  feed.addEventListener('click', event => {
+  feed.addEventListener('click', (event) => {
     const { target } = event;
-    const isOption = target.classList.contains(
-      'chat-message-feed__message-option'
-    );
+    const isOption = target.classList.contains('chat-message-feed__message-option');
     if (isOption) {
       const text = target.innerHTML;
       const message = target.parentElement.parentElement;
@@ -169,14 +165,10 @@ export function renderMessage(bot, say, reply, type) {
 
   if (hasReply) {
     const mapReply = options =>
-      options.map(
-        option =>
-          `<div class="chat-message-feed__message-option">${option}</div>`
-      );
+      options.map(option =>
+        `<div class="chat-message-feed__message-option">${option}</div>`);
     const options = hasReply
-      ? `<div class="chat-message-feed__message-options">${mapReply(reply).join(
-          ''
-        )}</div>`
+      ? `<div class="chat-message-feed__message-options">${mapReply(reply).join('')}</div>`
       : '';
     const replyClassNames = `chat-message-feed__message chat-message-feed__message--${
       messageType.SELF
