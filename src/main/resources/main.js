@@ -35,14 +35,19 @@ function renderPage(pageName) {
 }
 
 function sendToRasaServer(sender, action, body, method) {
-  log.info('RASA PAYLOAD: action=' + action + ', body=' + JSON.stringify(body));
+  var headers = {
+    'Cache-Control': 'no-cache',
+    Accept: '*/*'
+  };
+  var authToken = helper.getAuthToken();
+  if (authToken) {
+    headers.Authorization = 'Bearer ' + authToken;
+  }
+  log.info('RASA PAYLOAD: action=' + action + ', body=' + JSON.stringify(body) + ', token=' + authToken);
   var rasaResponse = httpClient.request({
     url: helper.getRasaUrl(sender) + action,
     method: method || 'POST',
-    headers: {
-      'Cache-Control': 'no-cache',
-      Accept: '*/*'
-    },
+    headers: headers,
     connectionTimeout: 20000,
     readTimeout: 5000,
     body: body ? JSON.stringify(body) : undefined,
@@ -129,8 +134,8 @@ function getAllMessagesFromRasa(query, sender) {
       prevAction = action;
       dupCount = 0;
     } else {
-      log.warning(dupCount + ' DUPLICATE ACTION, SKIPPING PROCESSING: ' + action);
       dupCount += 1;
+      log.warning(dupCount + ' DUPLICATE ACTION, SKIPPING PROCESSING: ' + action);
       if (dupCount >= 10) {
         log.warning('5 DUPLICATE ACTIONS IN A ROW, BREAKING: ' + action);
         break;

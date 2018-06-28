@@ -2,6 +2,8 @@ var portalLib = require('/lib/xp/portal');
 
 var RASA_HOST = 'rasa.host';
 var RASA_PORT = 'rasa.port';
+var RASA_PATH = 'rasa.path';
+var RASA_TOKEN = 'rasa.token';
 
 function getDefaultRasaUrl() {
   var url = portalLib.url({ path: '/', type: 'absolute' });
@@ -12,6 +14,10 @@ function getDefaultRasaUrl() {
   }
   return url;
 }
+
+exports.getAuthToken = function () {
+  return app.config && app.config[RASA_TOKEN];
+};
 
 exports.getAppUrl = function getAppUrl() {
   return portalLib.url({ path: '/app/' + app.name });
@@ -25,7 +31,11 @@ exports.getRasaUrl = function getRasaUrl(conversationId) {
     if (!/^https?:\/\//i.test(host)) {
       host = 'http://' + host;
     }
-    url = host + (config[RASA_PORT] ? ':' + config[RASA_PORT] : '') + '/';
+    var path = config[RASA_PATH] || '/';
+    if (!path.endsWith('/')) {
+      path += '/';
+    }
+    url = host + (config[RASA_PORT] ? ':' + config[RASA_PORT] : '') + path;
   } else {
     url = getDefaultRasaUrl();
   }

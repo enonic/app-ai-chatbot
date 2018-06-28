@@ -2,17 +2,17 @@
   "action_fingerprints": {
     "action_listen": {
       "slots": [
-        "location",
+        "cuisine",
         "price",
         "people",
-        "cuisine"
+        "location"
       ]
     },
     "action_restart": {
       "slots": []
     }
   },
-  "rasa_core": "0.9.3",
+  "rasa_core": "0.9.6",
   "max_histories": [
     3,
     5
