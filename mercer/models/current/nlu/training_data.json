@@ -1,0 +1,200 @@
+{
+  "rasa_nlu_data": {
+    "common_examples": [
+      {
+        "intent": "greet",
+        "text": "hi"
+      },
+      {
+        "intent": "greet",
+        "text": "hello"
+      },
+      {
+        "intent": "agree",
+        "text": "yes"
+      },
+      {
+        "intent": "refuse",
+        "text": "no"
+      },
+      {
+        "intent": "goodbye",
+        "text": "goodbye"
+      },
+      {
+        "intent": "survey_choice",
+        "entities": [
+          {
+            "start": 0,
+            "end": 4,
+            "value": "very",
+            "entity": "survey_choice"
+          }
+        ],
+        "text": "very"
+      },
+      {
+        "intent": "survey_choice",
+        "entities": [
+          {
+            "start": 0,
+            "end": 6,
+            "value": "mostly",
+            "entity": "survey_choice"
+          }
+        ],
+        "text": "mostly"
+      },
+      {
+        "intent": "survey_choice",
+        "entities": [
+          {
+            "start": 0,
+            "end": 8,
+            "value": "notatall",
+            "entity": "survey_choice"
+          }
+        ],
+        "text": "notatall"
+      },
+      {
+        "intent": "inform",
+        "entities": [
+          {
+            "start": 0,
+            "end": 3,
+            "value": "Tim",
+            "entity": "name"
+          }
+        ],
+        "text": "Tim"
+      },
+      {
+        "intent": "inform",
+        "entities": [
+          {
+            "start": 11,
+            "end": 14,
+            "value": "Bob",
+            "entity": "name"
+          }
+        ],
+        "text": "My name is Bob"
+      },
+      {
+        "intent": "inform",
+        "entities": [
+          {
+            "start": 4,
+            "end": 8,
+            "value": "Coco",
+            "entity": "name"
+          }
+        ],
+        "text": "I'm Coco"
+      },
+      {
+        "intent": "name",
+        "entities": [
+          {
+            "start": 0,
+            "end": 4,
+            "value": "Fred",
+            "entity": "name"
+          }
+        ],
+        "text": "Fred"
+      },
+      {
+        "intent": "inform",
+        "entities": [
+          {
+            "start": 0,
+            "end": 4,
+            "value": "Matt",
+            "entity": "name"
+          }
+        ],
+        "text": "Matt"
+      },
+      {
+        "intent": "inform",
+        "entities": [
+          {
+            "start": 0,
+            "end": 6,
+            "value": "Yvonne",
+            "entity": "name"
+          }
+        ],
+        "text": "Yvonne"
+      },
+      {
+        "intent": "inform",
+        "entities": [
+          {
+            "start": 4,
+            "end": 10,
+            "value": "Yvonne",
+            "entity": "name"
+          }
+        ],
+        "text": "I'm Yvonne"
+      },
+      {
+        "intent": "inform",
+        "entities": [
+          {
+            "start": 11,
+            "end": 15,
+            "value": "Matt",
+            "entity": "name"
+          }
+        ],
+        "text": "My name is Matt"
+      },
+      {
+        "intent": "inform",
+        "entities": [
+          {
+            "start": 11,
+            "end": 17,
+            "value": "Yvonne",
+            "entity": "name"
+          }
+        ],
+        "text": "My name is Yvonne"
+      },
+      {
+        "intent": "inform",
+        "entities": [
+          {
+            "start": 0,
+            "end": 5,
+            "value": "Simon",
+            "entity": "name"
+          }
+        ],
+        "text": "Simon"
+      },
+      {
+        "intent": "more_info",
+        "text": "My company doesn't really work in the community"
+      },
+      {
+        "intent": "more_info",
+        "text": "I don't really know"
+      },
+      {
+        "intent": "more_info",
+        "text": "I can't say anything"
+      },
+      {
+        "intent": "more_info",
+        "text": "My company do not do charity workl"
+      }
+    ],
+    "regex_features": [],
+    "entity_synonyms": []
+  }
+}

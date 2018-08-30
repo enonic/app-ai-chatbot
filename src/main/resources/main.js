@@ -5,7 +5,6 @@ var helper = require('/lib/helper');
 var init = require('/lib/init');
 var repo = require('/lib/repo');
 var swController = require('/lib/pwa/sw-controller');
-var templates = require('/lib/templates');
 var authLib = require('/lib/xp/auth');
 
 var siteTitle = 'AI Bot';
@@ -13,7 +12,9 @@ var RASA_ACTIONS = {
   LISTEN: 'action_listen',
   RESTART: 'action_restart'
 };
-var XP_ACTIONS = require('/lib/actions');
+// following are copied by webpack from appropriate folder
+var TEMPLATES = require('/lib/templates');
+var ACTIONS = require('/lib/actions');
 
 function renderPage(pageName) {
   return {
@@ -58,7 +59,7 @@ function sendToRasaServer(sender, action, body, method) {
 }
 
 function getCustomActionHandler(action) {
-  return XP_ACTIONS[action];
+  return ACTIONS[action];
 }
 
 function isWaitingForUserInput(action) {
@@ -69,18 +70,28 @@ function isRestartAction(action) {
   return action === RASA_ACTIONS.RESTART;
 }
 
-function resolveMessageForAction(action) {
+function resolveMessageForAction(action, tracker) {
   // TODO: do localization here
-  var templateAction = templates[action];
+  var templateAction = TEMPLATES[action];
   if (!templateAction) {
     log.warning('Missing template for action: %s', action);
+    return 'NOT_TRANSLATED&lt;' + action + '&gt;';
   }
-  return templateAction ? templateAction.text : 'NOT_TRANSLATED&lt;' + action + '&gt;';
+  log.info('RESOLED TEMPLATE FOR ACTION: ' + action + ', template: \n' + JSON.stringify(templateAction));
+
+  return templateAction.text.map(function (text) {
+    var tempText = text;
+    // eslint-disable-next-line guard-for-in
+    for (var slotName in tracker.slots) {
+      tempText = tempText.replace(new RegExp('{(' + slotName + ')}', 'g'), tracker.slots[slotName]);
+    }
+    return tempText;
+  });
 }
 
 // eslint-disable-next-line no-unused-vars
 function resolveButtonsForAction(action) {
-  var templateAction = templates[action];
+  var templateAction = TEMPLATES[action];
   return templateAction ? templateAction.options : undefined;
 }
 
@@ -94,24 +105,45 @@ function doRasaContinue(sender, action, events) {
   });
 }
 
+function resolveCustomEvents(tracker, actionResult) {
+  var events = [];
+  // eslint-disable-next-line guard-for-in
+  for (var slotName in actionResult.slots) {
+    var value = actionResult.slots[slotName];
+    events.push({
+      event: 'slot',
+      name: slotName,
+      value: value
+    });
+    // eslint-disable-next-line no-param-reassign
+    tracker.slots[slotName] = value;
+  }
+  return events;
+}
+
 function processAction(action, tracker) {
   var isRestarted;
   var actionResult;
-  var actionHandler = getCustomActionHandler(action);
+  var actionEvents;
 
+  var actionHandler = getCustomActionHandler(action);
   if (actionHandler) {
     actionResult = actionHandler(tracker);
+    log.info('CUSTOM ACTION RESULT FOR ACTION [' + action + ']: ' + JSON.stringify(actionResult));
+    actionEvents = resolveCustomEvents(tracker, actionResult);
   }
 
   isRestarted = isRestartAction(action);
 
   return {
     message: {
-      text: actionResult ? actionResult.text : resolveMessageForAction(action),
-      buttons: actionResult ? actionResult.options : resolveButtonsForAction(action),
+      // eslint-disable-next-line max-len
+      text: (actionResult && actionResult.text) || resolveMessageForAction((actionResult && actionResult.template) || action, tracker),
+      // eslint-disable-next-line max-len
+      buttons: (actionResult && actionResult.options) || resolveButtonsForAction((actionResult && actionResult.template) || action),
       restarted: isRestarted
     },
-    events: isRestarted ? [{ event: 'restart' }] : undefined
+    events: isRestarted ? [{ event: 'restart' }] : actionEvents
   };
 }
 

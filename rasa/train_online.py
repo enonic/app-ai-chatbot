@@ -4,6 +4,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import logging
+
 from rasa_core.agent import Agent
 from rasa_core.channels.console import ConsoleInputChannel
 from rasa_core.interpreter import RasaNLUInterpreter
@@ -14,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 
 def run_online_training(input_channel, interpreter,
-                        domain_file="domain_remote.yml",
+                        domain_file="domain.yml",
                         training_data_file='data/stories.md'):
     agent = Agent(domain_file,
                   policies=[MemoizationPolicy(max_history=2), KerasPolicy()],

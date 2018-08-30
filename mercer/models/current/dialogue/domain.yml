@@ -1,0 +1,51 @@
+action_factory: remote
+action_names:
+- utter_greet
+- utter_okforsurvey
+- utter_moreinfo
+- utter_goodbye
+- ask_survey_question
+actions:
+- utter_greet
+- utter_okforsurvey
+- utter_moreinfo
+- utter_goodbye
+- ask_survey_question
+config:
+  store_entities_as_slots: true
+entities:
+- qtext
+- qnumber
+- survey_choice
+- name
+- more_info
+intents:
+- greet
+- agree
+- refuse
+- survey_choice
+- goodbye
+- inform
+- more_info
+slots:
+  more_info:
+    initial_value: ''
+    type: rasa_core.slots.TextSlot
+  name:
+    initial_value: ''
+    type: rasa_core.slots.TextSlot
+  qnumber:
+    initial_value: 1.0
+    max_value: 250.0
+    min_value: 0.0
+    type: rasa_core.slots.FloatSlot
+  qtext:
+    initial_value: "Thank you. I will display five statements and ask you to rate\
+      \ each of them. This is the first: \nMy job gives me a sense of meaning and\
+      \ purpose."
+    type: rasa_core.slots.TextSlot
+  survey_choice:
+    initial_value: ''
+    type: rasa_core.slots.TextSlot
+templates: {}
+topics: []

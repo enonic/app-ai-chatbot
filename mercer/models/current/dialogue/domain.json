@@ -1,0 +1,28 @@
+{
+  "states": [
+    "intent_greet",
+    "intent_agree",
+    "intent_refuse",
+    "intent_survey_choice",
+    "intent_goodbye",
+    "intent_inform",
+    "intent_more_info",
+    "entity_qtext",
+    "entity_qnumber",
+    "entity_survey_choice",
+    "entity_name",
+    "entity_more_info",
+    "slot_more_info_0",
+    "slot_name_0",
+    "slot_qnumber_0",
+    "slot_qtext_0",
+    "slot_survey_choice_0",
+    "prev_action_listen",
+    "prev_action_restart",
+    "prev_utter_greet",
+    "prev_utter_okforsurvey",
+    "prev_utter_moreinfo",
+    "prev_utter_goodbye",
+    "prev_ask_survey_question"
+  ]
+}

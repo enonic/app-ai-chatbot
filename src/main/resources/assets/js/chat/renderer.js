@@ -112,10 +112,11 @@ function addFeedEventListeners(bot, sendCallback) {
     const isOption = target.classList.contains('chat-message-feed__message-option');
     if (isOption) {
       const text = target.innerHTML;
+      const data = target.getAttribute('data');
       const message = target.parentElement.parentElement;
       target.parentElement.parentElement.remove();
       message.classList.remove('chat-message-feed__message--reply');
-      sendCallback(text);
+      sendCallback(text, data);
     }
   });
 }
@@ -166,7 +167,8 @@ export function renderMessage(bot, say, reply, type) {
   if (hasReply) {
     const mapReply = options =>
       options.map(option =>
-        `<div class="chat-message-feed__message-option">${option}</div>`);
+        `<div class="chat-message-feed__message-option" data="${option.payload || option.title || option}">${option.title ||
+                                                                                                             option}</div>`);
     const options = hasReply
       ? `<div class="chat-message-feed__message-options">${mapReply(reply).join('')}</div>`
       : '';

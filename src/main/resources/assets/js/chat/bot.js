@@ -56,13 +56,13 @@ export default function Bot(options = {}) {
   this.botTalkNoHistory = botTalkNoHistory;
 
   const { sendCallback } = fullOptions;
-  fullOptions.sendCallback = (msg) => {
+  fullOptions.sendCallback = (msg, data) => {
     if (greetingMessage) {
       updateHistory(getSender(), greetingMessage);
       greetingMessage = null;
     }
 
-    sendCallback(msg, greetingMessage);
+    sendCallback(data || msg);
     selfTalk(msg);
   };
 

@@ -11,7 +11,7 @@ module.exports = {
       : {
         'css-mqpacker': {},
         'postcss-discard-comments': {},
-        cssnano: {discardUnused: true}
+        cssnano: { discardUnused: true }
       })
   }
 };

@@ -6,6 +6,7 @@ from __future__ import unicode_literals
 import argparse
 import logging
 import warnings
+
 from flask import Blueprint, request, jsonify
 from policy import RestaurantPolicy
 from rasa_core import utils
@@ -62,8 +63,8 @@ class ActionSuggest(Action):
         return []
 
 
-def train_stories(domain_file="domain_remote.yml",
-                  model_path="models/stories",
+def train_stories(domain_file="domain.yml",
+                  model_path="models/current/dialogue",
                   training_data_file="data/stories.md"):
     agent = Agent(domain_file,
                   policies=[MemoizationPolicy(max_history=3),
@@ -86,17 +87,18 @@ def train_nlu():
     from rasa_nlu.model import Trainer
     from rasa_nlu import config
 
-    training_data = load_data('data/nlu.json')
-    trainer = Trainer(config.load("nlu_model_config.yml"))
+    training_data = load_data('data/testdata.json')
+    trainer = Trainer(config.load("nlu_config.yml"))
     trainer.train(training_data)
-    model_directory = trainer.persist('models/nlu', fixed_model_name="current")  # Returns the directory the model is stored in
+    model_directory = trainer.persist('models/nlu', fixed_model_name="nlu",
+                                      project_name="current")  # Returns the directory the model is stored in
 
     return model_directory
 
 
 def console(serve_forever=True):
-    interpreter = RasaNLUInterpreter("models/nlu/default/current")
-    agent = Agent.load("models/stories", interpreter=interpreter)
+    interpreter = RasaNLUInterpreter("models/current/nlu")
+    agent = Agent.load("models/current/dialogues", interpreter=interpreter)
 
     if serve_forever:
         agent.handle_channel(ConsoleInputChannel())
@@ -154,13 +156,12 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     task = args.task
-    remote = args.remote
 
     # decide what to do based on first parameter of the script
     if task == "train-nlu":
         train_nlu()
     elif task == "train-stories":
-        train_stories("domain_remote.yml" if args.remote else "domain.yml")
+        train_stories()
     elif task == "server":
         server()
     elif task == 'console':

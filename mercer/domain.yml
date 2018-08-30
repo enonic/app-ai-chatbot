@@ -1,0 +1,43 @@
+intents:
+ - greet
+ - agree
+ - refuse
+ - survey_choice
+ - goodbye
+ - inform
+ - more_info
+
+entities:
+ - qtext
+ - qnumber
+ - survey_choice
+ - name
+ - more_info
+
+slots:
+  qtext:
+    type: text
+    initial_value: "Thank you. I will display five statements and ask you to rate each of them. This is the first: \nMy job gives me a sense of meaning and purpose."
+  qnumber:
+    type: float
+    min_value: 0.00
+    max_value: 250.00
+    initial_value: 1.0
+  survey_choice:
+    type: text
+    initial_value: ""
+  name:
+    type: text
+    initial_value: ""
+  more_info:
+    type: text
+    initial_value: ""
+
+action_factory: remote
+
+actions:
+  - utter_greet
+  - utter_okforsurvey
+  - utter_moreinfo
+  - utter_goodbye
+  - ask_survey_question

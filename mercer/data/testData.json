@@ -1,0 +1,207 @@
+﻿{
+  "rasa_nlu_data": {
+    "common_examples": [
+      {
+        "text": "hi",
+        "intent": "greet",
+        "entities": []
+      },
+      {
+        "text": "hello",
+        "intent": "greet",
+        "entities": []
+      },
+      {
+        "text": "yes",
+        "intent": "agree",
+        "entities": []
+      },
+      {
+        "text": "no",
+        "intent": "refuse",
+        "entities": []
+      },
+      {
+        "text": "goodbye",
+        "intent": "goodbye",
+        "entities": []
+      },
+      {
+        "text": "very",
+        "intent": "survey_choice",
+        "entities": [
+          {
+            "start": 0,
+            "end": 4,
+            "value": "very",
+            "entity": "survey_choice"
+          }
+        ]
+      },
+      {
+        "text": "mostly",
+        "intent": "survey_choice",
+        "entities": [
+          {
+            "start": 0,
+            "end": 6,
+            "value": "mostly",
+            "entity": "survey_choice"
+          }
+        ]
+      },
+      {
+        "text": "notatall",
+        "intent": "survey_choice",
+        "entities": [
+          {
+            "start": 0,
+            "end": 8,
+            "value": "notatall",
+            "entity": "survey_choice"
+          }
+        ]
+      },
+      {
+        "text": "Tim",
+        "intent": "inform",
+        "entities": [
+          {
+            "start": 0,
+            "end": 3,
+            "value": "Tim",
+            "entity": "name"
+          }
+        ]
+      },
+      {
+        "text": "My name is Bob",
+        "intent": "inform",
+        "entities": [
+          {
+            "start": 11,
+            "end": 14,
+            "value": "Bob",
+            "entity": "name"
+          }
+        ]
+      },
+      {
+        "text": "I'm Coco",
+        "intent": "inform",
+        "entities": [
+          {
+            "start": 4,
+            "end": 8,
+            "value": "Coco",
+            "entity": "name"
+          }
+        ]
+      },
+      {
+        "text": "Fred",
+        "intent": "name",
+        "entities": [
+          {
+            "start": 0,
+            "end": 4,
+            "value": "Fred",
+            "entity": "name"
+          }
+        ]
+      },
+      {
+        "text": "Matt",
+        "intent": "inform",
+        "entities": [
+          {
+            "start": 0,
+            "end": 4,
+            "value": "Matt",
+            "entity": "name"
+          }
+        ]
+      },
+      {
+        "text": "Yvonne",
+        "intent": "inform",
+        "entities": [
+          {
+            "start": 0,
+            "end": 6,
+            "value": "Yvonne",
+            "entity": "name"
+          }
+        ]
+      },
+      {
+        "text": "I'm Yvonne",
+        "intent": "inform",
+        "entities": [
+          {
+            "start": 4,
+            "end": 10,
+            "value": "Yvonne",
+            "entity": "name"
+          }
+        ]
+      },
+      {
+        "text": "My name is Matt",
+        "intent": "inform",
+        "entities": [
+          {
+            "start": 11,
+            "end": 15,
+            "value": "Matt",
+            "entity": "name"
+          }
+        ]
+      },
+      {
+        "text": "My name is Yvonne",
+        "intent": "inform",
+        "entities": [
+          {
+            "start": 11,
+            "end": 17,
+            "value": "Yvonne",
+            "entity": "name"
+          }
+        ]
+      },
+      {
+        "text": "Simon",
+        "intent": "inform",
+        "entities": [
+          {
+            "start": 0,
+            "end": 5,
+            "value": "Simon",
+            "entity": "name"
+          }
+        ]
+      },
+      {
+        "text": "My company doesn't really work in the community",
+        "intent": "more_info",
+        "entities": []
+      },
+      {
+        "text": "I don't really know",
+        "intent": "more_info",
+        "entities": []
+      },
+      {
+        "text": "I can't say anything",
+        "intent": "more_info",
+        "entities": []
+      },
+      {
+        "text": "My company do not do charity workl",
+        "intent": "more_info",
+        "entities": []
+      }
+    ]
+  }
+}

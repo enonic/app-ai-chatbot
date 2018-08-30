@@ -1,16 +1,19 @@
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const WorkboxPlugin = require('workbox-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
 
 const isDev = process.env.NODE_ENV !== 'production';
 
 const paths = {
   assets: 'src/main/resources/assets/',
+  buildLib: 'build/resources/main/lib/',
   buildAssets: 'build/resources/main/assets/',
   buildPwaLib: 'build/resources/main/lib/pwa/'
 };
 
 const assetsPath = path.join(__dirname, paths.assets);
+const buildLibPath = path.join(__dirname, paths.buildLib);
 const buildAssetsPath = path.join(__dirname, paths.buildAssets);
 const buildPwaLibPath = path.join(__dirname, paths.buildPwaLib);
 
@@ -65,7 +68,11 @@ module.exports = {
       globIgnores: [],
       swSrc: path.join(assetsPath, 'js/sw-dev.js'),
       swDest: path.join(buildPwaLibPath, 'sw-template.js')
-    })
+    }),
+    new CopyPlugin([
+      { from: 'mercer/templates.js', to: buildLibPath },
+      { from: 'mercer/actions.js', to: buildLibPath }
+    ])
   ],
   devtool: isDev ? 'source-map' : false
 };

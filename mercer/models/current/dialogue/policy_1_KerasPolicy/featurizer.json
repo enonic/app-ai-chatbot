@@ -1,0 +1,38 @@
+{
+  "py/object": "rasa_core.featurizers.MaxHistoryTrackerFeaturizer",
+  "max_history": 3,
+  "remove_duplicates": true,
+  "state_featurizer": {
+    "py/object": "rasa_core.featurizers.BinarySingleStateFeaturizer",
+    "input_state_map": {
+      "entity_more_info": 11,
+      "entity_name": 10,
+      "entity_qnumber": 8,
+      "entity_qtext": 7,
+      "entity_survey_choice": 9,
+      "intent_agree": 1,
+      "intent_goodbye": 4,
+      "intent_greet": 0,
+      "intent_inform": 5,
+      "intent_more_info": 6,
+      "intent_refuse": 2,
+      "intent_survey_choice": 3,
+      "prev_action_listen": 17,
+      "prev_action_restart": 18,
+      "prev_ask_survey_question": 23,
+      "prev_utter_goodbye": 22,
+      "prev_utter_greet": 19,
+      "prev_utter_moreinfo": 21,
+      "prev_utter_okforsurvey": 20,
+      "slot_more_info_0": 12,
+      "slot_name_0": 13,
+      "slot_qnumber_0": 14,
+      "slot_qtext_0": 15,
+      "slot_survey_choice_0": 16
+    },
+    "num_features": 24,
+    "slot_feature_len": 5,
+    "user_feature_len": 12
+  },
+  "use_intent_probabilities": false
+}
