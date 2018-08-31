@@ -5,7 +5,7 @@ function askQuestion(tracker) {
   var question;
   var template;
 
-  if (qno <= 5) {
+  if (qno < 5) {
     switch (qno) {
       case 1:
         question = 'Excellent thanks. \nMy company acts in a socially responsible way in the communities in which it operates.';
