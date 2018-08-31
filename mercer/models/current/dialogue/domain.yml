@@ -1,10 +1,5 @@
-action_factory: remote
-action_names:
-- utter_greet
-- utter_okforsurvey
-- utter_moreinfo
-- utter_goodbye
-- ask_survey_question
+%YAML 1.1
+---
 actions:
 - utter_greet
 - utter_okforsurvey
@@ -20,13 +15,20 @@ entities:
 - name
 - more_info
 intents:
-- greet
-- agree
-- refuse
-- survey_choice
-- goodbye
-- inform
-- more_info
+- greet:
+    use_entities: true
+- agree:
+    use_entities: true
+- refuse:
+    use_entities: true
+- survey_choice:
+    use_entities: true
+- goodbye:
+    use_entities: true
+- inform:
+    use_entities: true
+- more_info:
+    use_entities: true
 slots:
   more_info:
     initial_value: ''
@@ -48,4 +50,3 @@ slots:
     initial_value: ''
     type: rasa_core.slots.TextSlot
 templates: {}
-topics: []

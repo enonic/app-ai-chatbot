@@ -1,12 +1,12 @@
 {
   "states": [
-    "intent_greet",
     "intent_agree",
-    "intent_refuse",
-    "intent_survey_choice",
     "intent_goodbye",
+    "intent_greet",
     "intent_inform",
     "intent_more_info",
+    "intent_refuse",
+    "intent_survey_choice",
     "entity_qtext",
     "entity_qnumber",
     "entity_survey_choice",
@@ -19,6 +19,7 @@
     "slot_survey_choice_0",
     "prev_action_listen",
     "prev_action_restart",
+    "prev_action_default_fallback",
     "prev_utter_greet",
     "prev_utter_okforsurvey",
     "prev_utter_moreinfo",
