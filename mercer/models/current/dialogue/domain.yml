@@ -1,5 +1,12 @@
 %YAML 1.1
 ---
+action_factory: remote
+action_names:
+- utter_greet
+- utter_okforsurvey
+- utter_moreinfo
+- utter_goodbye
+- ask_survey_question
 actions:
 - utter_greet
 - utter_okforsurvey

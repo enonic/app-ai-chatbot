@@ -15,3 +15,125 @@ Started http server on port 7454
 Up and running
 USING `rasa_core.server` is deprecated and will be removed in the future. Use `rasa_core.run --enable_api` instead.
 Rasa process starting
+USING `rasa_core.server` is deprecated and will be removed in the future. Use `rasa_core.run --enable_api` instead.
+Rasa process starting
+Restoring parameters from models/current/nlu\intent_classifier_tensorflow_embedding.ckpt
+C:\Python36\lib\site-packages\pykwalify\core.py:99: UnsafeLoaderWarning: 
+The default 'Loader' for 'load(stream)' without further arguments can be unsafe.
+Use 'load(stream, Loader=ruamel.yaml.Loader)' explicitly if that is OK.
+Alternatively include the following in your code:
+
+  import warnings
+  warnings.simplefilter('ignore', ruamel.yaml.error.UnsafeLoaderWarning)
+
+In most other cases you should consider using 'safe_load(stream)'
+  data = yaml.load(stream)
+
+Rasa Core server is up and running on http://localhost:5005
+USING `rasa_core.server` is deprecated and will be removed in the future. Use `rasa_core.run --enable_api` instead.
+Rasa process starting
+Restoring parameters from models/current/nlu\intent_classifier_tensorflow_embedding.ckpt
+C:\Python36\lib\site-packages\pykwalify\core.py:99: UnsafeLoaderWarning: 
+The default 'Loader' for 'load(stream)' without further arguments can be unsafe.
+Use 'load(stream, Loader=ruamel.yaml.Loader)' explicitly if that is OK.
+Alternatively include the following in your code:
+
+  import warnings
+  warnings.simplefilter('ignore', ruamel.yaml.error.UnsafeLoaderWarning)
+
+In most other cases you should consider using 'safe_load(stream)'
+  data = yaml.load(stream)
+
+Rasa Core server is up and running on http://localhost:5005
+USING `rasa_core.server` is deprecated and will be removed in the future. Use `rasa_core.run --enable_api` instead.
+Rasa process starting
+Restoring parameters from models/current/nlu\intent_classifier_tensorflow_embedding.ckpt
+C:\Python36\lib\site-packages\pykwalify\core.py:99: UnsafeLoaderWarning: 
+The default 'Loader' for 'load(stream)' without further arguments can be unsafe.
+Use 'load(stream, Loader=ruamel.yaml.Loader)' explicitly if that is OK.
+Alternatively include the following in your code:
+
+  import warnings
+  warnings.simplefilter('ignore', ruamel.yaml.error.UnsafeLoaderWarning)
+
+In most other cases you should consider using 'safe_load(stream)'
+  data = yaml.load(stream)
+
+Rasa Core server is up and running on http://localhost:5005
+USING `rasa_core.server` is deprecated and will be removed in the future. Use `rasa_core.run --enable_api` instead.
+Rasa process starting
+Restoring parameters from models/current/nlu\intent_classifier_tensorflow_embedding.ckpt
+C:\Python36\lib\site-packages\pykwalify\core.py:99: UnsafeLoaderWarning: 
+The default 'Loader' for 'load(stream)' without further arguments can be unsafe.
+Use 'load(stream, Loader=ruamel.yaml.Loader)' explicitly if that is OK.
+Alternatively include the following in your code:
+
+  import warnings
+  warnings.simplefilter('ignore', ruamel.yaml.error.UnsafeLoaderWarning)
+
+In most other cases you should consider using 'safe_load(stream)'
+  data = yaml.load(stream)
+
+Rasa Core server is up and running on http://localhost:5005
+USING `rasa_core.server` is deprecated and will be removed in the future. Use `rasa_core.run --enable_api` instead.
+Rasa process starting
+Restoring parameters from models/current/nlu\intent_classifier_tensorflow_embedding.ckpt
+C:\Python36\lib\site-packages\pykwalify\core.py:99: UnsafeLoaderWarning: 
+The default 'Loader' for 'load(stream)' without further arguments can be unsafe.
+Use 'load(stream, Loader=ruamel.yaml.Loader)' explicitly if that is OK.
+Alternatively include the following in your code:
+
+  import warnings
+  warnings.simplefilter('ignore', ruamel.yaml.error.UnsafeLoaderWarning)
+
+In most other cases you should consider using 'safe_load(stream)'
+  data = yaml.load(stream)
+
+Rasa Core server is up and running on http://localhost:5005
+USING `rasa_core.server` is deprecated and will be removed in the future. Use `rasa_core.run --enable_api` instead.
+Rasa process starting
+Restoring parameters from models/current/nlu\intent_classifier_tensorflow_embedding.ckpt
+C:\Python36\lib\site-packages\pykwalify\core.py:99: UnsafeLoaderWarning: 
+The default 'Loader' for 'load(stream)' without further arguments can be unsafe.
+Use 'load(stream, Loader=ruamel.yaml.Loader)' explicitly if that is OK.
+Alternatively include the following in your code:
+
+  import warnings
+  warnings.simplefilter('ignore', ruamel.yaml.error.UnsafeLoaderWarning)
+
+In most other cases you should consider using 'safe_load(stream)'
+  data = yaml.load(stream)
+
+Rasa Core server is up and running on http://localhost:5005
+Rasa process starting
+Restoring parameters from models/current/nlu\intent_classifier_tensorflow_embedding.ckpt
+C:\Python36\lib\site-packages\pykwalify\core.py:99: UnsafeLoaderWarning: 
+The default 'Loader' for 'load(stream)' without further arguments can be unsafe.
+Use 'load(stream, Loader=ruamel.yaml.Loader)' explicitly if that is OK.
+Alternatively include the following in your code:
+
+  import warnings
+  warnings.simplefilter('ignore', ruamel.yaml.error.UnsafeLoaderWarning)
+
+In most other cases you should consider using 'safe_load(stream)'
+  data = yaml.load(stream)
+
+Rasa Core server is up and running on http://localhost:5005
+Restoring parameters from models/current/nlu\intent_classifier_tensorflow_embedding.ckpt
+Failed to load any agent model. Running Rasa Core server with out loaded model now. 'arch'
+Started http server on port 7454
+Up and running
+Restoring parameters from models/current/nlu\intent_classifier_tensorflow_embedding.ckpt
+C:\Python36\lib\site-packages\pykwalify\core.py:99: UnsafeLoaderWarning: 
+The default 'Loader' for 'load(stream)' without further arguments can be unsafe.
+Use 'load(stream, Loader=ruamel.yaml.Loader)' explicitly if that is OK.
+Alternatively include the following in your code:
+
+  import warnings
+  warnings.simplefilter('ignore', ruamel.yaml.error.UnsafeLoaderWarning)
+
+In most other cases you should consider using 'safe_load(stream)'
+  data = yaml.load(stream)
+
+Started http server on port 7454
+Up and running
