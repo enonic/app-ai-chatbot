@@ -82,7 +82,7 @@
     "postcss-discard-comments": "^2.0.4",
     "postcss-loader": "2.1.1",
     "postcss-normalize": "^4.0.0",
-    "prettier": "1.11.1",
+    "prettier": "2.3.0",
     "style-loader": "0.20.3",
     "stylelint": "9.1.3",
     "stylelint-config-standard": "^18.3.0",
