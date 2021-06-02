@@ -63,7 +63,7 @@
     "cssnano": "4.0.0-rc.2",
     "deep-assign": "^2.0.0",
     "download": "^6.2.5",
-    "eslint": "4.19.0",
+    "eslint": "7.27.0",
     "eslint-config-airbnb": "16.1.0",
     "eslint-config-airbnb-base": "12.1.0",
     "eslint-config-prettier": "2.9.0",
