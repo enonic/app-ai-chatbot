@@ -12,7 +12,7 @@
     "lint:root": "eslint ./*.js -c src/main/resources/assets/js/.eslintrc.js --no-ignore --fix",
     "lint:less": "stylelint \"src/**/*.less\" --fix",
     "lint:css": "stylelint \"src/**/*.css\" --fix",
-    "build": "webpack --progress --colors --hide-modules",
+    "build": "webpack --progress --hide-modules",
     "build:dev": "cross-env NODE_ENV=development webpack",
     "build:prod": "cross-env NODE_ENV=production webpack",
     "watch": "gradle deploy -t",
