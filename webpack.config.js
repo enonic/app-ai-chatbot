@@ -1,5 +1,5 @@
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const WorkboxPlugin = require('workbox-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+// const { InjectManifest } = require('workbox-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
 
@@ -15,7 +15,7 @@ const paths = {
 const assetsPath = path.join(__dirname, paths.assets);
 const buildLibPath = path.join(__dirname, paths.buildLib);
 const buildAssetsPath = path.join(__dirname, paths.buildAssets);
-const buildPwaLibPath = path.join(__dirname, paths.buildPwaLib);
+// const buildPwaLibPath = path.join(__dirname, paths.buildPwaLib);
 
 module.exports = {
   entry: {
@@ -33,18 +33,12 @@ module.exports = {
     rules: [
       {
         test: /\.less$/,
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          publicPath: '../',
-          use: [
-            {
-              loader: 'css-loader',
-              options: { sourceMap: isDev, importLoaders: 1 }
-            },
-            { loader: 'postcss-loader', options: { sourceMap: isDev } },
-            { loader: 'less-loader', options: { sourceMap: isDev } }
-          ]
-        })
+        use: [
+          { loader: MiniCssExtractPlugin.loader, options: { publicPath: '../' } },
+          { loader: 'css-loader', options: { sourceMap: false, importLoaders: 1 } },
+          { loader: 'postcss-loader', options: { sourceMap: false } },
+          { loader: 'less-loader', options: { sourceMap: false } }
+        ]
       },
       {
         test: /\.(eot|woff|woff2|ttf)$/,
@@ -57,18 +51,13 @@ module.exports = {
     ]
   },
   plugins: [
-    new ExtractTextPlugin({
-      filename: 'precache/bundle.css',
-      allChunks: true,
-      disable: false
-    }),
-    new WorkboxPlugin({
-      globDirectory: buildAssetsPath,
-      globPatterns: ['precache/**/*'],
-      globIgnores: [],
+    new MiniCssExtractPlugin({
+      filename: 'precache/bundle.css'
+    }), /*
+    new InjectManifest({
       swSrc: path.join(assetsPath, 'js/sw-dev.js'),
       swDest: path.join(buildPwaLibPath, 'sw-template.js')
-    }),
+    }),*/
     new CopyPlugin([
       { from: 'mercer/templates.js', to: buildLibPath },
       { from: 'mercer/actions.js', to: buildLibPath }
