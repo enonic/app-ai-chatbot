@@ -45,7 +45,7 @@
   "homepage": "https://github.com/enonic/app-ai-chatbot#readme",
   "dependencies": {
     "autoresize": "0.1.0",
-    "chart.js": "^2.7.2",
+    "chart.js": "^3.3.2",
     "moment": "^2.22.0"
   },
   "devDependencies": {
