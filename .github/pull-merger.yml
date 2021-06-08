@@ -1,2 +1,3 @@
-commitMessage: 'Merged by the Pull Merger Bot'
-labels: ['dependencies']
+commitMessage: "Merged by the Pull Merger Bot"
+labels:
+  - "dependencies"
