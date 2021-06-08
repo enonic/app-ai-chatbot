@@ -46,7 +46,7 @@
   "dependencies": {
     "autoresize": "0.1.0",
     "chart.js": "^2.7.2",
-    "moment": "^2.22.0"
+    "moment": "^2.29.1"
   },
   "devDependencies": {
     "autoprefixer": "8.1.0",
